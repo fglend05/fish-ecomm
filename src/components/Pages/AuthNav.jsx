@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { UserAuth } from "../Context/AuthContext";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavOptions from "../Options/NavOptions";
 import NavOptionsMobile from "../Options/NavOptionsMobile";
 import LoginOptions from "../Options/LoginOptions";
@@ -9,22 +10,24 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { auth } from "../Firebase/firebase";
-import { setUserLogOutState } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 
-function AuthNav() {
+const AuthNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [nav, setNav] = useState(false);
   const handleClick = () => setNav(!nav);
+  const { user, logout } = UserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        dispatch(setUserLogOutState());
-      })
-      .catch((err) => alert(err.message));
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      navigate("/");
+      console.log("Logout");
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   return (
@@ -64,12 +67,12 @@ function AuthNav() {
                     </button>
                   </div>
                   <div className="py-1">
-                    <button className="group flex items-center px-4 w-[100%]  py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">
+                    <button className="group flex text-left items-center px-4 w-[100%]  py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">
                       <ManageAccountsIcon
                         className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white"
                         aria-hidden="true"
                       />
-                      Manage Account
+                      Manage Account ({user && user.email})
                     </button>
                     <button
                       onClick={handleSignOut}
@@ -100,6 +103,6 @@ function AuthNav() {
       </ul>
     </div>
   );
-}
+};
 
 export default AuthNav;

@@ -1,52 +1,44 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../Firebase/firebase";
 import { login } from "../features/userSlice";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { UserAuth } from "../Context/AuthContext";
 import "./Register.css";
 
-function Register() {
-  const dispatch = useDispatch();
+const Register = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const register = (e) => {
+  const { createUser } = UserAuth();
+
+  const register = async (e) => {
     e.preventDefault();
-
-    if (!name) {
-      return alert("Please enter Full Name");
+    setError("");
+    try {
+      await createUser(email, password);
+      navigate("/auth/user");
+    } catch (e) {
+      setError(e.message);
+      console.log(e.message);
     }
-
-    auth.createUserWithEmailAndPassword(email, password).then((userAuth) => {
-      userAuth.user
-        .updateProfile({
-          displayName: name,
-          address: address,
-          number: number,
-          username: username,
-        })
-        .then(() => {
-          dispatch(
-            login({
-              email: userAuth.user.email,
-              uid: userAuth.user.id,
-              displayName: name,
-            })
-          );
-        })
-        .catch((err) => alert(err));
-    });
   };
+
   return (
     <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
       <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
         <div className="flex h-[100%]">
           <div className="flex-[0.4] bg-zinc-300 rounded-l-3xl">
-            <div className="pl-5 pt-5 text-2xl  font-bold">FishCommerce.</div>
+            <div className="pl-5 pt-5 text-2xl  font-bold">
+              <Link to="/"> FishCommerce.</Link>
+            </div>
             <p className="text-center pt-[40%] font-bold text-3xl">
               Already Have an Account?
             </p>
@@ -67,7 +59,7 @@ function Register() {
             </div>
             <span className="w-[80%] ml-[70px] mt-3 border-t-[1px] border-black block"></span>
             <div className="mt-5 w-[100%] pl-5 text-center pt-5">
-              <form className="">
+              <form className="" onSubmit={register}>
                 <div className="">
                   <input
                     onChange={(e) => setName(e.target.value)}
@@ -97,19 +89,19 @@ function Register() {
                 </div>
                 <div>
                   <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    placeholder="Enter Email"
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                    type="text"
+                    placeholder="Enter Username"
                     className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
                 <div>
                   <input
-                    value={username}
-                    onChange={(e) => setUserName(e.target.value)}
-                    type="text"
-                    placeholder="Enter Username/Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    placeholder="Enter Email"
                     className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
@@ -123,7 +115,7 @@ function Register() {
                   />
                 </div>
                 <button
-                  onClick={register}
+                  type="submit"
                   className="px-20 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
                 >
                   Sign Up
@@ -135,6 +127,6 @@ function Register() {
       </div>
     </div>
   );
-}
+};
 
 export default Register;

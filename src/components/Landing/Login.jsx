@@ -1,40 +1,37 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../Context/AuthContext";
 import LoginOptions from "../Options/LoginOptions";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import GoogleIcon from "@mui/icons-material/Google";
 import "./Register.css";
-import { auth } from "../Firebase/firebase";
-import { login } from "../features/userSlice";
-import { useDispatch } from "react-redux";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { signIn } = UserAuth();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((userAuth) => {
-        dispatch(
-          login({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-          })
-        );
-      })
-      .catch((err) => alert(err));
+    setEmail("");
+    try {
+      await signIn(email, password);
+      navigate("/auth/user");
+    } catch (e) {
+      setError(e.message);
+      console.log(e.message);
+    }
   };
   return (
     <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
       <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
         <div className="flex h-[100%]">
           <div className="flex-[0.6]">
-            <div className="pl-5 pt-5 text-2xl  font-bold">FishCommerce.</div>
+            <div className="pl-5 pt-5 text-2xl  font-bold">
+              <Link to="/"> FishCommerce.</Link>
+            </div>
             <div className="text-center justify-center items-center mt-20 ">
               <p className="font-bold text-5xl mb-3">Login to Your Account</p>
               <p>Login Using Social Networks</p>
@@ -44,7 +41,7 @@ function Login() {
               </div>
               <p className="midline">or</p>
               <div className="mt-5">
-                <form>
+                <form onSubmit={handleSignIn}>
                   <div>
                     <input
                       value={email}
@@ -65,7 +62,6 @@ function Login() {
                   </div>
                   <button
                     type="submit"
-                    onClick={handleSignIn}
                     className="px-10 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
                   >
                     Login
