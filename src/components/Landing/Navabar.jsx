@@ -31,7 +31,7 @@ function Navabar() {
             </Link>
           </ul>
           <Link to="/login">
-            <button className="border-none bg-transparent text-black ml-9 pr-4 pt-4">
+            <button className="border-none bg-transparent text-black p-4 ml-6">
               Sign In
             </button>
           </Link>

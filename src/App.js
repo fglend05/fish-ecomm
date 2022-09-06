@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Hero from "./components/Landing/Hero";
 import Navabar from "./components/Landing/Navabar";
 import Register from "./components/Landing/Register";
 import Login from "./components/Landing/Login";
-import Account from "./components/User/Account";
 import Market from "./components/Pages/Market";
 import Forum from "./components/Pages/Forum";
 import ContactUs from "./components/Pages/ContactUs";

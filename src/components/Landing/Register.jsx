@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
 import loginBg from "../../assets/fish-hero-bg.jpg";
-import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 function Register() {
   return (
@@ -16,7 +16,7 @@ function Register() {
             <div className="w-[50%]">
               <img
                 src={loginBg}
-                alt="Login Image"
+                alt="LoginImage"
                 className="bg-cover bg-no-repeat h-[70vh] w-[100vh] rounded-3xl"
               />
             </div>
@@ -94,7 +94,7 @@ function Register() {
                     <img
                       className="h-16 w-16 object-cover rounded-full"
                       src={UserCircleIcon}
-                      alt="Current profile photo"
+                      alt="ProfilePhoto"
                     />
                   </div>
                   <div className="items-center text-center justify-center pl-5">

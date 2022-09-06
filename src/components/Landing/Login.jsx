@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import LoginOptions from "../Options/LoginOptions";
+import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
+import GoogleIcon from "@mui/icons-material/Google";
 import "./Register.css";
 
 function Login() {
@@ -12,10 +15,9 @@ function Login() {
             <div className="text-center justify-center items-center mt-20 ">
               <p className="font-bold text-5xl mb-3">Login to Your Account</p>
               <p>Login Using Social Networks</p>
-              <div className="flex justify-center">
-                <p className="p-5">FB</p>
-                <p className="p-5">FB</p>
-                <p className="p-5">FB</p>
+              <div className="flex justify-center p-5">
+                <LoginOptions Icon={FacebookRoundedIcon} color="blue" />
+                <LoginOptions Icon={GoogleIcon} color="blue" />
               </div>
               <p className="midline">or</p>
               <div className="mt-5">
@@ -27,6 +29,7 @@ function Login() {
                       placeholder="Email"
                       name=""
                       id=""
+                      autoComplete="off"
                     />
                   </div>
                   <div>
@@ -36,6 +39,7 @@ function Login() {
                       type="password"
                       name=""
                       id=""
+                      autoComplete="off"
                     />
                   </div>
                   <button
