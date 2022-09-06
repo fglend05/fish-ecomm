@@ -1,127 +1,135 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { auth } from "../Firebase/firebase";
+import { login } from "../features/userSlice";
 import "./Register.css";
-import loginBg from "../../assets/fish-hero-bg.jpg";
-import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 function Register() {
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [number, setNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const register = (e) => {
+    e.preventDefault();
+
+    if (!name) {
+      return alert("Please enter Full Name");
+    }
+
+    auth.createUserWithEmailAndPassword(email, password).then((userAuth) => {
+      userAuth.user
+        .updateProfile({
+          displayName: name,
+          address: address,
+          number: number,
+          username: username,
+        })
+        .then(() => {
+          dispatch(
+            login({
+              email: userAuth.user.email,
+              uid: userAuth.user.id,
+              displayName: name,
+            })
+          );
+        })
+        .catch((err) => alert(err));
+    });
+  };
   return (
-    <div className="w-full h-full">
-      <div className="bg-login-gradient bg-no-repeat bg-cover bg-center flex items-center justify-center h-[100vh] opacity-90">
-        <div className="bg-zinc-200 py-5 px-5 h-[85vh] w-[50vw] rounded-3xl shadow-xl shadow-zinc-500">
-          <div className="text-center py-5">
-            <p className="text-2xl"> Register</p>
-          </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <img
-                src={loginBg}
-                alt="LoginImage"
-                className="bg-cover bg-no-repeat h-[70vh] w-[100vh] rounded-3xl"
-              />
+    <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
+      <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
+        <div className="flex h-[100%]">
+          <div className="flex-[0.4] bg-zinc-300 rounded-l-3xl">
+            <div className="pl-5 pt-5 text-2xl  font-bold">FishCommerce.</div>
+            <p className="text-center pt-[40%] font-bold text-3xl">
+              Already Have an Account?
+            </p>
+            <p className="justify-center text-center mt-5">
+              Sign In and start to browse fresh fish deals!
+            </p>
+            <div className="text-center mt-10">
+              <Link to="/login ">
+                <button className="px-20 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">
+                  Sign In
+                </button>
+              </Link>
             </div>
-            <form action="#">
-              <div className="forms w-full pt-5 px-2">
-                <div className="grid grid-cols-2 gap-1 px-2">
-                  <div className="bg-zinc-100 rounded-3xl h-[40px]">
-                    <input
-                      type="text"
-                      name=""
-                      placeholder="First Name"
-                      className="h-[40px] w-[100%] rounded-3xl pl-5"
-                    />
-                  </div>
-                  <div className="bg-zinc-100 rounded-3xl h-[40px]">
-                    <input
-                      type="text"
-                      name=""
-                      placeholder="Last Name"
-                      className="h-[40px] w-[100%] rounded-3xl pl-5"
-                    />
-                  </div>
-                </div>
-                <div className="py-5 px-2">
+          </div>
+          <div className="flex-[0.6]">
+            <div className="w-[100%] text-center mt-[3%]">
+              <h2 className="font-bold text-3xl"> Register Now!</h2>
+            </div>
+            <span className="w-[80%] ml-[70px] mt-3 border-t-[1px] border-black block"></span>
+            <div className="mt-5 w-[100%] pl-5 text-center pt-5">
+              <form className="">
+                <div className="">
                   <input
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
                     type="text"
-                    name=""
-                    placeholder="Address"
-                    className="w-[100%] h-[40px] rounded-3xl pl-5"
+                    placeholder="Enter Full Name"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
-                <div className="pb-5 px-2">
+                <div>
                   <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     type="text"
-                    name=""
-                    placeholder="Contact Number"
-                    className="w-[100%] h-[40px] rounded-3xl pl-5"
+                    placeholder="Enter Address"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
-                <div className="pb-5 px-2">
+                <div className="">
                   <input
-                    type="email"
-                    name=""
-                    placeholder="Email Address"
-                    className="w-[100%] h-[40px] rounded-3xl pl-5"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    type="text"
+                    placeholder="Enter Contact Number"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
-                <div className="pb-5 px-2">
+                <div>
                   <input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     type="email"
-                    name=""
-                    placeholder="Username"
-                    className="w-[100%] h-[40px] rounded-3xl pl-5"
+                    placeholder="Enter Email"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-1 px-2">
-                  <div className="bg-zinc-100 rounded-3xl h-[40px]">
-                    <input
-                      type="passwowrd"
-                      name=""
-                      placeholder="Password"
-                      className="h-[40px] w-[100%] rounded-3xl pl-5"
-                    />
-                  </div>
-                  <div className="bg-zinc-100 rounded-3xl h-[40px]">
-                    <input
-                      type="password"
-                      placeholder="Confirm Password"
-                      className="h-[40px] w-[100%] rounded-3xl pl-5"
-                    />
-                  </div>
+                <div>
+                  <input
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                    type="text"
+                    placeholder="Enter Username/Email"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
+                  />
                 </div>
-                <div className="py-5 px-5 flex w-[100%]">
-                  <div className="shrink-0 hidden">
-                    <img
-                      className="h-16 w-16 object-cover rounded-full"
-                      src={UserCircleIcon}
-                      alt="ProfilePhoto"
-                    />
-                  </div>
-                  <div className="items-center text-center justify-center pl-5">
-                    <input
-                      type="file"
-                      className="block w-[100%] text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                    />
-                  </div>
+                <div>
+                  <input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    placeholder="Password"
+                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
+                  />
                 </div>
-                <div className="w-[100%] items-center justify-center text-center">
-                  <button
-                    className="h-[50px] w-[250px] bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
-                    type=""
-                  >
-                    Sign up
-                  </button>
-                </div>
-                <div className="w-full text-right pt-5">
-                  <p>
-                    Already have an Account?
-                    <Link to="/login" className="text-blue">
-                      Login!
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            </form>
+                <button
+                  onClick={register}
+                  className="px-20 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
+                >
+                  Sign Up
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginOptions from "../Options/LoginOptions";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import GoogleIcon from "@mui/icons-material/Google";
 import "./Register.css";
+import { auth } from "../Firebase/firebase";
+import { login } from "../features/userSlice";
+import { useDispatch } from "react-redux";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userAuth) => {
+        dispatch(
+          login({
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+          })
+        );
+      })
+      .catch((err) => alert(err));
+  };
   return (
     <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
       <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
@@ -24,26 +47,25 @@ function Login() {
                 <form>
                   <div>
                     <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="h-[50px] w-[50%] mb-5 rounded-full pl-5"
                       type="text"
                       placeholder="Email"
-                      name=""
-                      id=""
-                      autoComplete="off"
                     />
                   </div>
                   <div>
                     <input
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="h-[50px] w-[50%] mb-5 rounded-full pl-5"
                       placeholder="Password"
                       type="password"
-                      name=""
-                      id=""
-                      autoComplete="off"
                     />
                   </div>
                   <button
                     type="submit"
+                    onClick={handleSignIn}
                     className="px-10 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
                   >
                     Login
