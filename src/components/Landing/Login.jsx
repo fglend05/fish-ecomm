@@ -10,6 +10,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setsuccessMessage] = useState("");
   const navigate = useNavigate();
   const { signIn } = UserAuth();
 
@@ -17,11 +18,30 @@ function Login() {
     e.preventDefault();
     setEmail("");
     try {
-      await signIn(email, password);
-      navigate("/auth/user");
+      await signIn(email, password).then((userCredential) => {
+        setsuccessMessage("Login Sucessfull");
+        console.log(setsuccessMessage);
+        setEmail("");
+        setPassword("");
+        setError("");
+        setTimeout(() => {
+          setsuccessMessage("");
+          navigate("/auth/user");
+        }, 3000);
+      });
     } catch (e) {
-      setError(e.message);
-      console.log(e.message);
+      const errorCode = e.code;
+      console.log(errorCode);
+
+      if (e.message === "Firebase: Error (auth/invalid-email).") {
+        setError("Please fill all fields");
+      }
+      if (e.message === "Firebase: Error (auth/user-not-found).") {
+        setError("Email not registered");
+      }
+      if (e.message === "Firebase: Error (auth/wrong-password).") {
+        setError("Wrong Password");
+      }
     }
   };
   return (

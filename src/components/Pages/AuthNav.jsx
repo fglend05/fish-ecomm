@@ -63,7 +63,7 @@ const AuthNav = () => {
                         className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white"
                         aria-hidden="true"
                       />
-                      View Cart
+                      View Cart ({user[0].cart})
                     </button>
                   </div>
                   <div className="py-1">
@@ -72,7 +72,7 @@ const AuthNav = () => {
                         className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white"
                         aria-hidden="true"
                       />
-                      Manage Account ({user && user.email})
+                      Manage Account ({user[0].email})
                     </button>
                     <button
                       onClick={handleSignOut}

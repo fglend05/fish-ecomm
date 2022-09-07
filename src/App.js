@@ -8,9 +8,10 @@ import Market from "./components/Pages/Market";
 import Forum from "./components/Pages/Forum";
 import ContactUs from "./components/Pages/ContactUs";
 import AboutUs from "./components/Pages/AboutUs";
-import AuthNav from "./components/Pages/AuthNav";
 import { AuthContextProvider } from "./components/Context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Products from "./components/Landing/Products";
+import Home from "./components/Pages/Home";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
             path="/"
             element={
               <>
-                <Navabar /> <Hero />
+                <Navabar /> <Hero /> <Products />
               </>
             }
           ></Route>
@@ -30,7 +31,7 @@ function App() {
             path="/auth/user"
             element={
               <ProtectedRoute>
-                <AuthNav />
+                <Home />
               </ProtectedRoute>
             }
           ></Route>

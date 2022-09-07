@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../Firebase/firebase";
+import { auth, db } from "../Firebase/firebase";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { login } from "../features/userSlice";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAuth } from "../Context/AuthContext";
 import "./Register.css";
+import matchers from "@testing-library/jest-dom/matchers";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -15,18 +17,51 @@ const Register = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setsuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const { createUser } = UserAuth();
+  const usersCollectionRef = collection(db, "users");
 
   const register = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      await createUser(email, password);
-      navigate("/auth/user");
+      await createUser(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        const initalCartValue = 0;
+        console.log(user);
+
+        addDoc(collection(db, "users"), {
+          uid: user.uid,
+          displayName: name,
+          address: address,
+          phoneNumber: number,
+          username: username,
+          email: email,
+          password: password,
+          cart: initalCartValue,
+        }).then(() => {
+          setsuccessMessage("New user registered successfully");
+          console.log(setsuccessMessage);
+          setName("");
+          setAddress("");
+          setNumber("");
+          setEmail("");
+          setUserName("");
+          setPassword("");
+          setError("");
+          setTimeout(() => {
+            setsuccessMessage("");
+            navigate("/login");
+          }, 4000);
+        });
+      });
     } catch (e) {
-      setError(e.message);
+      if (error.message === "Firebase: Error (auth/invalid-email)") {
+        setError("Please fill all required fields");
+        console.log(setError);
+      }
       console.log(e.message);
     }
   };

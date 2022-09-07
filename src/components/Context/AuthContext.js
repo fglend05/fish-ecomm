@@ -5,12 +5,13 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "../Firebase/firebase";
+import { auth, db } from "../Firebase/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState("");
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -26,8 +27,20 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
-      console.log(user);
-      setUser(currentUser);
+      if (currentUser) {
+        const getUsers = async () => {
+          const q = query(
+            collection(db, "users"),
+            where("uid", "==", currentUser.uid)
+          );
+          const data = await getDocs(q);
+          console.log(q);
+          setUser(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        };
+        getUsers();
+      } else {
+        setUser(null);
+      }
     });
     return () => {
       unsub();
