@@ -30,7 +30,6 @@ const Register = () => {
       await createUser(email, password).then((userCredential) => {
         const user = userCredential.user;
         const initalCartValue = 0;
-        console.log(user);
 
         addDoc(collection(db, "users"), {
           uid: user.uid,

@@ -16,11 +16,11 @@ function Login() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    setEmail("");
     try {
       await signIn(email, password).then((userCredential) => {
         setsuccessMessage("Login Sucessfull");
-        console.log(setsuccessMessage);
+        window.localStorage.setItem("isLoggedIn", true);
+        console.log(setsuccessMessage.data);
         setEmail("");
         setPassword("");
         setError("");

@@ -22,9 +22,11 @@ const AuthNav = () => {
 
   const handleSignOut = async () => {
     try {
-      await logout();
-      navigate("/");
-      console.log("Logout");
+      await logout().then(() => {
+        navigate("/");
+        console.log("Logout");
+        window.localStorage.removeItem("isLoggedIn");
+      });
     } catch (e) {
       console.log(e.message);
     }
