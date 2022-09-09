@@ -26,7 +26,7 @@ function Login() {
         setError("");
         setTimeout(() => {
           setsuccessMessage("");
-          navigate("/auth/user");
+          navigate("/");
         }, 3000);
       });
     } catch (e) {

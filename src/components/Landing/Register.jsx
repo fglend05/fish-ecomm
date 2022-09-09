@@ -11,7 +11,7 @@ import matchers from "@testing-library/jest-dom/matchers";
 
 const Register = () => {
   const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUserName] = useState("");
@@ -31,10 +31,10 @@ const Register = () => {
         const user = userCredential.user;
         const initalCartValue = 0;
 
-        addDoc(collection(db, "users"), {
+        addDoc(usersCollectionRef, {
           uid: user.uid,
           displayName: name,
-          address: address,
+          deliveryAddress: deliveryAddress,
           phoneNumber: number,
           username: username,
           email: email,
@@ -44,7 +44,7 @@ const Register = () => {
           setsuccessMessage("New user registered successfully");
           console.log(setsuccessMessage);
           setName("");
-          setAddress("");
+          setDeliveryAddress("");
           setNumber("");
           setEmail("");
           setUserName("");
@@ -105,10 +105,10 @@ const Register = () => {
                 </div>
                 <div>
                   <input
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    value={deliveryAddress}
+                    onChange={(e) => setDeliveryAddress(e.target.value)}
                     type="text"
-                    placeholder="Enter Address"
+                    placeholder="Enter Address: Detailed Address"
                     className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>

@@ -9,9 +9,9 @@ import Forum from "./components/Pages/Forum";
 import ContactUs from "./components/Pages/ContactUs";
 import AboutUs from "./components/Pages/AboutUs";
 import { AuthContextProvider } from "./components/Context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Products from "./components/Landing/Products";
-import Home from "./components/Pages/Home";
+import Account from "./components/User/Account";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const loggedIn = window.localStorage.getItem("isLoggedIn");
@@ -23,32 +23,28 @@ function App() {
           <Route
             path="/"
             element={
-              loggedIn ? (
-                <Navigate to="/auth/user" />
-              ) : (
-                <>
-                  <Navabar /> <Hero /> <Products />
-                </>
-              )
+              <>
+                <Navabar /> <Hero /> <Products />
+              </>
             }
-          ></Route>
+          />
+          {/* Sign in Page */}
+          <Route path="/signup" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          {/* HomePages */}
           <Route
-            path="/auth/user"
+            path="/account"
             element={
               <ProtectedRoute>
-                <Home />
+                <Navabar />
+                <Account />
               </ProtectedRoute>
             }
-          ></Route>
-          {/* Sign in Page */}
-          <Route path="/signup" element={<Register />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          {/* UserDir */}
-          {/* HomePages */}
-          <Route path="/market" element={<Market />}></Route>
-          <Route path="/forum" element={<Forum />}></Route>
-          <Route path="/contactus" element={<ContactUs />}></Route>
-          <Route path="/aboutus" element={<AboutUs />}></Route>
+          />
+          <Route path="/market" element={<Market />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/aboutus" element={<AboutUs />} />
         </Routes>
       </AuthContextProvider>
     </div>
