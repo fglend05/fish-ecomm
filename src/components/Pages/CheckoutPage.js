@@ -48,7 +48,7 @@ function CheckoutPage() {
             <>
               <h2 className="whitespace-nowrap">
                 Subtotal ({items.length} items):
-                <span className="font-bold">
+                <span className="font-bold pl-1">
                   <Currency quantity={phPrice} currency="PHP" />
                 </span>
               </h2>

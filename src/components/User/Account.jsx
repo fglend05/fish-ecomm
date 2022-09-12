@@ -5,9 +5,12 @@ import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import { UserAuth } from "../Context/AuthContext";
+import { useSelector } from "react-redux";
+import { selectItems } from "../features/basketSlice";
 
 function Account() {
   const { user } = UserAuth();
+  const items = useSelector(selectItems);
   return (
     <div className="w-full h-screen bg-zinc-300 ">
       <div className="pt-12">
@@ -31,7 +34,7 @@ function Account() {
                 <div className="pr-3">
                   <ShoppingCartRoundedIcon />
                 </div>
-                My Orders ({user[0].cart})
+                My Orders ({items.length})
               </div>
               <div className="py-3 pl-3 flex hover:bg-zinc-500 hover:text-white ease-in-out duration-300 rounded-2xl cursor-pointer">
                 <div className="pr-3">
