@@ -1,5 +1,6 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./components/Context/AuthContext";
 import Hero from "./components/Landing/Hero";
 import Navabar from "./components/Landing/Navabar";
 import Register from "./components/Landing/Register";
@@ -8,10 +9,10 @@ import Market from "./components/Pages/Market";
 import Forum from "./components/Pages/Forum";
 import ContactUs from "./components/Pages/ContactUs";
 import AboutUs from "./components/Pages/AboutUs";
-import { AuthContextProvider } from "./components/Context/AuthContext";
 import Products from "./components/Landing/Products";
 import Account from "./components/User/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CheckoutPage from "./components/Pages/CheckoutPage";
 
 function App() {
   const loggedIn = window.localStorage.getItem("isLoggedIn");
@@ -45,6 +46,7 @@ function App() {
           <Route path="/forum" element={<Forum />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
       </AuthContextProvider>
     </div>

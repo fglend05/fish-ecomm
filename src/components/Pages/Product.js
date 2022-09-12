@@ -1,15 +1,33 @@
 import React, { useState } from "react";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import Currency from "react-currency-formatter";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/basketSlice";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
 
 function Product({ id, title, price, description, category, image }) {
+  const dispatch = useDispatch();
   const phPrice = price * 54;
   const [rating] = useState(
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
   );
+
+  const addItemToCart = () => {
+    const product = {
+      id,
+      title,
+      price,
+      rating,
+      description,
+      category,
+      image,
+      hasPrime,
+    };
+
+    dispatch(addToCart(product));
+  };
 
   const [hasPrime] = useState(Math.random() < 0.5);
   return (
@@ -24,7 +42,7 @@ function Product({ id, title, price, description, category, image }) {
         className="object-contain w-[200px] h-[200px] mx-7  "
       />
 
-      <h4 className="my-3">{title}</h4>
+      <h4 className="my-3 line-clamp-2">{title}</h4>
 
       <div className="flex">
         {Array(rating)
@@ -47,7 +65,9 @@ function Product({ id, title, price, description, category, image }) {
         </div>
       )}
 
-      <button className="mt-auto button">Add to cart</button>
+      <button className="mt-auto button" onClick={addItemToCart}>
+        Add to cart
+      </button>
     </div>
   );
 }

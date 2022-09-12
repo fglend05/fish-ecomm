@@ -9,6 +9,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useSelector } from "react-redux";
+import { selectItems } from "../features/basketSlice";
 
 function Navabar() {
   const [nav, setNav] = useState(false);
@@ -16,6 +18,7 @@ function Navabar() {
   const handleClick = () => setNav(!nav);
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
+  const items = useSelector(selectItems);
 
   const handleSignOut = async () => {
     try {
@@ -30,7 +33,7 @@ function Navabar() {
   };
 
   return (
-    <div className="w-screen h-[80px] z-10 bg-zinc-200 fixed drop-shadow-lg z-50">
+    <div className="w-screen h-[80px] bg-zinc-200 fixed drop-shadow-lg z-50">
       <div className="px-2 flex justify-between items-center w-full h-full">
         <div className="flex items-center">
           <h1 className="text-3xl font-bold mr-4 sm:text-4xl">FishCommerce.</h1>
@@ -78,13 +81,15 @@ function Navabar() {
                   {isOpen && (
                     <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
                       <div className="py-1">
-                        <button className="group flex items-center px-4 w-[100%]  py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white  ease-in-out duration-300">
-                          <ShoppingCartIcon
-                            className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
-                            aria-hidden="true"
-                          />
-                          View Cart ({user[0].cart})
-                        </button>
+                        <Link to="/checkout">
+                          <button className="group flex items-center px-4 w-[100%]  py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white  ease-in-out duration-300">
+                            <ShoppingCartIcon
+                              className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
+                              aria-hidden="true"
+                            />
+                            View Cart ({items.length}){/* ({user[0].cart}) */}
+                          </button>
+                        </Link>
                       </div>
                       <div className="py-1">
                         <Link to="/account">

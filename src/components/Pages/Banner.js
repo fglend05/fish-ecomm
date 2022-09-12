@@ -2,6 +2,8 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import BannerImage from "../../assets/banner.jpg";
+import BannerTwo from "../../assets/bannerTwo.jpg";
+import BannerThree from "../../assets/banner3.jpg";
 
 function Banner() {
   return (
@@ -19,10 +21,10 @@ function Banner() {
           <img loading="lazy" src={BannerImage} alt="Product" />
         </div>
         <div>
-          <img loading="lazy" src={BannerImage} alt="Product" />
+          <img loading="lazy" src={BannerTwo} alt="Product" />
         </div>
         <div>
-          <img loading="lazy" src={BannerImage} alt="Product" />
+          <img loading="lazy" src={BannerThree} alt="Product" />
         </div>
       </Carousel>
     </div>

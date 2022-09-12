@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Product from "./Product";
 import DCBanner from "../../assets/dicban.png";
 
-function ProductFeed({ products }) {
+function ProductFeed() {
   const [loading, setLoading] = useState();
   const [data, setData] = useState();
 

@@ -9,7 +9,7 @@ import { UserAuth } from "../Context/AuthContext";
 function Account() {
   const { user } = UserAuth();
   return (
-    <div className="w-full max-h-screen-2xl  bg-zinc-300 ">
+    <div className="w-full h-screen bg-zinc-300 ">
       <div className="pt-12">
         <div className="flex">
           <div className="flex-[0.2] pt-20 pl-[100px] ">
