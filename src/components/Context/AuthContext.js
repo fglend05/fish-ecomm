@@ -7,13 +7,11 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../Firebase/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useDispatch } from "react-redux/es/exports";
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const dispatch = useDispatch();
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
