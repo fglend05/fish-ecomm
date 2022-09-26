@@ -12,7 +12,7 @@ import { useState } from "react";
 import Selling from "./Selling";
 
 function Account() {
-  const [isDetailsToggled, setDetailsIsToggled] = useState(false);
+  const [isDetailsToggled, setDetailsIsToggled] = useState(true);
   const [isAddressToggled, setAddressIsToggled] = useState(false);
   const [isSellerToggled, setSellerIsToggled] = useState(false);
 
@@ -54,7 +54,7 @@ function Account() {
                 <div className="pr-3">
                   <LocationOnRoundedIcon />
                 </div>
-                My Address
+                Delivery Address
               </button>
               <button
                 className="buttonTwo"
