@@ -43,7 +43,11 @@ function ProductFeed() {
           />
         ))}
 
-      <img className="md:col-span-full" src={DCBanner} alt="" />
+      <img
+        className="md:col-span-full w-[100%] h-[300px]"
+        src={DCBanner}
+        alt="Promo Details"
+      />
 
       <div className="md:col-span-2">
         {data

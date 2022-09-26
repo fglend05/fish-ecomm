@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, db } from "../Firebase/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { login } from "../features/userSlice";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../Firebase/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
 import "./Register.css";
-import matchers from "@testing-library/jest-dom/matchers";
 
 const Register = () => {
   const [name, setName] = useState("");

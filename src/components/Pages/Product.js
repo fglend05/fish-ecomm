@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import Currency from "react-currency-formatter";
 import { useDispatch } from "react-redux";
+import { UserAuth } from "../Context/AuthContext";
 import { addToCart } from "../features/basketSlice";
+import { db } from "../Firebase/firebase";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
 
 function Product({ id, title, price, description, category, image }) {
+  const { user } = UserAuth();
+  const [cart, setCart] = useState([]);
   const dispatch = useDispatch();
   const phPrice = price * 54;
   const [rating] = useState(
@@ -26,7 +30,14 @@ function Product({ id, title, price, description, category, image }) {
       hasPrime,
     };
 
-    dispatch(addToCart(product));
+    dispatch(addToCart(product)).then((item) => {
+      product?.map((i) => {
+        if (i.id === item.id) {
+          i.cart = true;
+        }
+      });
+      db.collection("cart").doc(`${item.id}`).set(item, { merge: true });
+    });
   };
 
   const [hasPrime] = useState(Math.random() < 0.5);
@@ -64,10 +75,21 @@ function Product({ id, title, price, description, category, image }) {
           <p className="text-xs text-gray-500">Free Delivery</p>
         </div>
       )}
-
-      <button className="mt-auto button" onClick={addItemToCart}>
-        Add to cart
-      </button>
+      {!user ? (
+        <button
+          disabled={!user}
+          className={`button mt-2 ${
+            !user &&
+            "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+          }`}
+        >
+          Login to checkout
+        </button>
+      ) : (
+        <button className="mt-auto button" onClick={addItemToCart}>
+          Add to cart
+        </button>
+      )}
     </div>
   );
 }
