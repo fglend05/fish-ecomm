@@ -30,14 +30,7 @@ function Product({ id, title, price, description, category, image }) {
       hasPrime,
     };
 
-    dispatch(addToCart(product)).then((item) => {
-      product?.map((i) => {
-        if (i.id === item.id) {
-          i.cart = true;
-        }
-      });
-      db.collection("cart").doc(`${item.id}`).set(item, { merge: true });
-    });
+    dispatch(addToCart(product));
   };
 
   const [hasPrime] = useState(Math.random() < 0.5);
