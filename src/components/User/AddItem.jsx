@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import DatePicker from "react-date-picker";
 import { db, storage } from "../Firebase/firebase";
+import { ref } from "firebase/storage";
+import { v4 } from "uuid";
 
 function AddItem() {
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
-  const [description, setDescription] = useState();
-  const [category, setCategory] = useState();
-  const [size, setSize] = useState();
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [size, setSize] = useState("");
+  const [date, setDate] = useState(new Date());
   const [image, setImage] = useState(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [rating, setRating] = useState("");
   const [hasPrime, setHasPrime] = useState("");
 
@@ -25,11 +29,14 @@ function AddItem() {
     }
   };
 
-  const addProduct = (e) => {
+  const addProduct = async (e) => {
     e.preventDefault();
 
-    const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
-    uploadTask.on(
+    const uploadTask = storage
+      .ref(`product-images/${image.name + v4()}`)
+      .put(image);
+
+    await uploadTask.on(
       "state_changed",
       (snapshot) => {
         const progress = (snapshot.bytesTranferred / snapshot.totalBytes) * 100;
@@ -51,6 +58,7 @@ function AddItem() {
                 rating: rating,
                 description: description,
                 category: category,
+                date: date,
                 image: image,
                 hasPrime: hasPrime,
               })
@@ -60,6 +68,7 @@ function AddItem() {
                 setRating("");
                 setDescription("");
                 setCategory("");
+                setDate("");
                 setImage("");
                 setHasPrime("");
                 document.getElementById("file").value = "";
@@ -69,19 +78,12 @@ function AddItem() {
       }
     );
   };
-  console.log(error);
-  // title
-  // Price
-  // rating
-  // Description
-  // category
-  // image
-  // hasPrime
+
   return (
     <div>
       <div className="">
         <h2 className="px-5 py-5 font-bold">List some fresh fish</h2>
-        <form autoComplete="off" onSubmit={addProduct}>
+        <form onSubmit={addProduct}>
           <div className="flex">
             <div className="flex-[0.5] px-3">
               <div className="pb-2">
@@ -151,7 +153,10 @@ function AddItem() {
               </div>
               <div>
                 <h2>Product Date</h2>
-                <input type="date" />
+                <DatePicker
+                  onChange={(e) => setDate(e.target.value)}
+                  value={date}
+                />
               </div>
             </div>
           </div>

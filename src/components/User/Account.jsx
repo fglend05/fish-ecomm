@@ -14,7 +14,7 @@ function Account() {
   const [isSellerToggled, setSellerIsToggled] = useState(false);
 
   return (
-    <div className="w-full h-screen bg-zinc-300 ">
+    <div className="w-full h-full bg-zinc-300">
       <div className="pt-12">
         <div className="flex">
           <div className="flex-[0.2] pt-20 pl-[100px] ">
