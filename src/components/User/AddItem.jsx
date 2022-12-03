@@ -18,6 +18,7 @@ function AddItem() {
   const [size, setSize] = useState("");
   const [date, setDate] = useState(new Date());
   const [file, setFile] = useState(null);
+  const [imgURL, setImgURL] = useState(null);
   const [progress, SetProgress] = useState(null);
   const [error, setError] = useState("");
   const [rating, setRating] = useState("");
@@ -46,8 +47,9 @@ function AddItem() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
           SetProgress(progress);
           console.log(progress);
         },
@@ -58,7 +60,7 @@ function AddItem() {
         //handle sucess upload
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setFile(downloadURL);
+            setImgURL(downloadURL);
           });
         }
       );
@@ -75,7 +77,7 @@ function AddItem() {
         category: category,
         description: description,
         size: size,
-        image: file,
+        image: imgURL,
         productDate: date,
         timestamp: serverTimestamp(),
       });
