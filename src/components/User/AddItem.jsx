@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-date-picker";
 import { db, storage } from "../Firebase/firebase";
-import { ref } from "firebase/storage";
-import { v4 } from "uuid";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 
 function AddItem() {
   const [title, setTitle] = useState("");
@@ -11,7 +17,8 @@ function AddItem() {
   const [category, setCategory] = useState("");
   const [size, setSize] = useState("");
   const [date, setDate] = useState(new Date());
-  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [progress, SetProgress] = useState(null);
   const [error, setError] = useState("");
   const [rating, setRating] = useState("");
   const [hasPrime, setHasPrime] = useState("");
@@ -21,62 +28,60 @@ function AddItem() {
   const productImgHandler = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile && types.includes(selectedFile.type)) {
-      setImage(selectedFile);
+      setFile(selectedFile);
       setError("");
     } else {
-      setImage(null);
+      setFile(null);
       setError("Only png and jpg are allowed");
     }
   };
 
+  useEffect(() => {
+    const uploadFile = () => {
+      const name = new Date().getTime() + file.name;
+      console.log(name);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          SetProgress(progress);
+          console.log(progress);
+        },
+        //handle failed upload
+        (error) => {
+          console.log(error);
+        },
+        //handle sucess upload
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setFile(downloadURL);
+          });
+        }
+      );
+    };
+    file && uploadFile();
+  }, [file]);
+
   const addProduct = async (e) => {
     e.preventDefault();
-
-    const uploadTask = storage
-      .ref(`product-images/${image.name + v4()}`)
-      .put(image);
-
-    await uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = (snapshot.bytesTranferred / snapshot.totalBytes) * 100;
-        console.log(progress);
-      },
-      (err) => {
-        setError(err.message);
-      },
-      () => {
-        storage
-          .ref("product-images")
-          .child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            db.collection("Product")
-              .add({
-                title: title,
-                price: Number(price),
-                rating: rating,
-                description: description,
-                category: category,
-                date: date,
-                image: image,
-                hasPrime: hasPrime,
-              })
-              .then(() => {
-                setTitle("");
-                setPrice(0);
-                setRating("");
-                setDescription("");
-                setCategory("");
-                setDate("");
-                setImage("");
-                setHasPrime("");
-                document.getElementById("file").value = "";
-              })
-              .catch((err) => setError(err.message));
-          });
-      }
-    );
+    try {
+      const res = await addDoc(collection(db, "selleritems"), {
+        productName: title,
+        price: price,
+        category: category,
+        description: description,
+        size: size,
+        image: file,
+        productDate: date,
+        timestamp: serverTimestamp(),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -161,7 +166,11 @@ function AddItem() {
             </div>
           </div>
           <div className="flex justify-end">
-            <button type="submit" className="defButton ">
+            <button
+              type="submit"
+              className="defButton "
+              disabled={progress !== null && progress < 100}
+            >
               Add Product
             </button>
             <button className="defButton ">Save As Draft</button>
