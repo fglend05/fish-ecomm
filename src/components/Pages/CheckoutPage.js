@@ -64,7 +64,6 @@ function CheckoutPage() {
           )}
         </div>
       </div>
-      0
     </div>
   );
 }

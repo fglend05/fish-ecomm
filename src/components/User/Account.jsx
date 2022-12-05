@@ -2,10 +2,7 @@ import React from "react";
 import "../Landing/Register.css";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
-import { useSelector } from "react-redux";
-import { selectItems } from "../features/basketSlice";
 import MyDetails from "./MyDetails";
 import MyAdress from "./MyAdress";
 import { useState } from "react";
@@ -17,7 +14,7 @@ function Account() {
   const [isSellerToggled, setSellerIsToggled] = useState(false);
 
   return (
-    <div className="w-full h-screen bg-zinc-300 ">
+    <div className="w-full h-full bg-zinc-300">
       <div className="pt-12">
         <div className="flex">
           <div className="flex-[0.2] pt-20 pl-[100px] ">

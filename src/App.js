@@ -13,9 +13,9 @@ import Products from "./components/Landing/Products";
 import Account from "./components/User/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CheckoutPage from "./components/Pages/CheckoutPage";
+import Footer from "./components/Landing/Footer";
 
 function App() {
-  const loggedIn = window.localStorage.getItem("isLoggedIn");
   return (
     <div>
       {/* Start Landing Page */}
@@ -48,6 +48,7 @@ function App() {
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
+        <Footer />
       </AuthContextProvider>
     </div>
   );
