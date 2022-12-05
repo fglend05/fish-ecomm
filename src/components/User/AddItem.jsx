@@ -9,6 +9,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import { UserAuth } from "../Context/AuthContext";
 
 function AddItem() {
   const [title, setTitle] = useState("");
@@ -23,6 +24,9 @@ function AddItem() {
   const [error, setError] = useState("");
   const [rating, setRating] = useState("");
   const [hasPrime, setHasPrime] = useState("");
+
+  const { user } = UserAuth();
+  const loggedUser = user[0].displayName;
 
   const types = ["image/png", "image/jpeg"];
 
@@ -71,7 +75,8 @@ function AddItem() {
   const addProduct = async (e) => {
     e.preventDefault();
     try {
-      const res = await addDoc(collection(db, "selleritems"), {
+      const res = await addDoc(collection(db, "products"), {
+        sellerName: loggedUser,
         productName: title,
         price: price,
         category: category,
@@ -80,7 +85,22 @@ function AddItem() {
         image: imgURL,
         productDate: date,
         timestamp: serverTimestamp(),
-      });
+      })
+        .then(() => {
+          setTitle("");
+          setPrice("");
+          setDescription("");
+          setCategory("");
+          setSize("");
+          setFile(null);
+          setDate(new Date());
+          setFile(null);
+          setImgURL(null);
+          SetProgress(null);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }

@@ -25,7 +25,6 @@ function Navabar() {
       await logout().then(() => {
         navigate("/");
         console.log("Logout");
-        window.localStorage.removeItem("isLoggedIn");
       });
     } catch (e) {
       console.log(e.message);

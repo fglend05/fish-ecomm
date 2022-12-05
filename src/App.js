@@ -16,7 +16,6 @@ import CheckoutPage from "./components/Pages/CheckoutPage";
 import Footer from "./components/Landing/Footer";
 
 function App() {
-  const loggedIn = window.localStorage.getItem("isLoggedIn");
   return (
     <div>
       {/* Start Landing Page */}
