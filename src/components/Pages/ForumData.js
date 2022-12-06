@@ -1,5 +1,7 @@
 import React from "react";
 import ChatIcon from "@mui/icons-material/Chat";
+import CommentIcon from "@mui/icons-material/Comment";
+import StyleIcon from "@mui/icons-material/Style";
 
 const ForumData = () => {
   return (
@@ -26,6 +28,20 @@ const ForumData = () => {
                     Start A Discussion
                   </div>
                 </button>
+                <div>
+                  <button className="buttonTwo pr-5">
+                    <div className="pr-3">
+                      <CommentIcon />
+                    </div>
+                    All Discussions
+                  </button>
+                  <button className="buttonTwo pr-5">
+                    <div className="pr-3">
+                      <StyleIcon />
+                    </div>
+                    Tags
+                  </button>
+                </div>
                 <div className="mt-5 ml-5"></div>
               </div>
             </div>
