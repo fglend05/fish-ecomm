@@ -24,6 +24,7 @@ function AddItem() {
   const [error, setError] = useState("");
   const [rating, setRating] = useState("");
   const [hasPrime, setHasPrime] = useState("");
+  const [random, setRandom] = useState(null);
 
   const { user } = UserAuth();
   const loggedUser = user[0].displayName;
@@ -77,7 +78,7 @@ function AddItem() {
     try {
       const res = await addDoc(collection(db, "products"), {
         sellerName: loggedUser,
-        productName: title,
+        title: title,
         price: price,
         category: category,
         description: description,
@@ -130,7 +131,7 @@ function AddItem() {
                 <input
                   type="number"
                   className="inputText"
-                  onChange={(e) => setPrice(e.target.value)}
+                  onChange={(e) => setPrice(e.target.valueAsNumber)}
                   value={price}
                 />
               </div>
@@ -143,6 +144,9 @@ function AddItem() {
                   onChange={(e) => setCategory(e.target.value)}
                   value={category}
                 >
+                  <option value="" disabled>
+                    Select Cagtegory
+                  </option>
                   <option value="fresh">Smoked</option>
                   <option value="dried">Dried</option>
                   <option value="processed">Processed</option>

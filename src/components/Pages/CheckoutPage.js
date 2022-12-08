@@ -1,7 +1,7 @@
 import React from "react";
 import Navabar from "../Landing/Navabar";
 import DCBanner from "../../assets/dicban.png";
-import Currency from "react-currency-formatter";
+import Currency, { contextType } from "react-currency-formatter";
 import { UserAuth } from "../Context/AuthContext";
 import { useSelector } from "react-redux";
 import { selectItems, selectTotal } from "../features/basketSlice";
@@ -18,11 +18,33 @@ function CheckoutPage() {
 
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
-
-    const checkoutSession = await axios.post("/api/create-checkout-session", {
+    const checkoutSession = await axios.post("http://localhost:4000/checkout", {
       items: items,
       email: user[0].email,
+      // name: user[0].displayName,
+      // address: user[0].deliveryAddress,
     });
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
+    if (result.error) {
+      alert(result.error.message);
+    }
+    // await fetch("http://localhost:4000/checkout", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({ items: items }),
+    // })
+    //   .then((response) => {
+    //     return response.json(0);
+    //   })
+    //   .then((response) => {
+    //     if (response.url) {
+    //       window.location.assign(response.url);
+    //     }
+    //   });
   };
 
   return (
