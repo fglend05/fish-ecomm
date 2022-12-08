@@ -13,7 +13,7 @@ function Product({ id, title, price, description, category, image }) {
   const { user } = UserAuth();
   const [cart, setCart] = useState([]);
   const dispatch = useDispatch();
-  const phPrice = price * 54;
+  const phPrice = price * 1;
   const [rating] = useState(
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
   );

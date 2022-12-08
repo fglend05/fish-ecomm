@@ -6,12 +6,24 @@ import { UserAuth } from "../Context/AuthContext";
 import { useSelector } from "react-redux";
 import { selectItems, selectTotal } from "../features/basketSlice";
 import CheckoutProduct from "./CheckoutProduct";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+const stripePromise = loadStripe(`${process.env.STRIPE_PUBLIC_KEY}`);
 
 function CheckoutPage() {
   const { user } = UserAuth();
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
-  const phPrice = total * 54;
+  const phPrice = total * 1;
+
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+
+    const checkoutSession = await axios.post("/api/create-checkout-session", {
+      items: items,
+      email: user[0].email,
+    });
+  };
 
   return (
     <div>
@@ -48,10 +60,12 @@ function CheckoutPage() {
               <h2 className="whitespace-nowrap">
                 Subtotal ({items.length} items):
                 <span className="font-bold pl-1">
-                  <Currency quantity={phPrice} currency="PHP" />
+                  <Currency quantity={total} currency="PHP" />
                 </span>
               </h2>
               <button
+                role="link"
+                onClick={createCheckoutSession}
                 disabled={!user}
                 className={`button mt-2 ${
                   !user &&

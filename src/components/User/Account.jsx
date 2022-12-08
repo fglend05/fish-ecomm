@@ -7,8 +7,10 @@ import MyDetails from "./MyDetails";
 import MyAdress from "./MyAdress";
 import { useState } from "react";
 import Selling from "./Selling";
+import { UserAuth } from "../Context/AuthContext";
 
 function Account() {
+  const { user } = UserAuth();
   const [isDetailsToggled, setDetailsIsToggled] = useState(true);
   const [isAddressToggled, setAddressIsToggled] = useState(false);
   const [isSellerToggled, setSellerIsToggled] = useState(false);
@@ -53,22 +55,24 @@ function Account() {
                 </div>
                 Delivery Address
               </button>
-              <button
-                className="buttonTwo"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (isSellerToggled === false) {
-                    setDetailsIsToggled(false);
-                    setAddressIsToggled(false);
-                    setSellerIsToggled(true);
-                  }
-                }}
-              >
-                <div className="pr-3">
-                  <StorefrontRoundedIcon />
-                </div>
-                Become a Seller
-              </button>
+              {user[0].role === "seller" && (
+                <button
+                  className="buttonTwo"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isSellerToggled === false) {
+                      setDetailsIsToggled(false);
+                      setAddressIsToggled(false);
+                      setSellerIsToggled(true);
+                    }
+                  }}
+                >
+                  <div className="pr-3">
+                    <StorefrontRoundedIcon />
+                  </div>
+                  List Products
+                </button>
+              )}
             </div>
           </div>
           <div className="flex-[0.8] px-10 pt-20">
@@ -76,7 +80,7 @@ function Account() {
               {/* Open Close for My account details */}
               {isDetailsToggled && <MyDetails />}
               {isAddressToggled && <MyAdress />}
-              {isSellerToggled && <Selling />}
+              {user[0].role === "seller" && isSellerToggled && <Selling />}
             </div>
           </div>
         </div>

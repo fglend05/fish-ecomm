@@ -10,6 +10,7 @@ const Register = () => {
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -34,6 +35,7 @@ const Register = () => {
           phoneNumber: number,
           username: username,
           email: email,
+          role: role,
           password: password,
           cart: initalCartValue,
         }).then(() => {
@@ -43,6 +45,7 @@ const Register = () => {
           setDeliveryAddress("");
           setNumber("");
           setEmail("");
+          setRole("");
           setUserName("");
           setPassword("");
           setError("");
@@ -113,18 +116,35 @@ const Register = () => {
                     value={number}
                     onChange={(e) => setNumber(e.target.value)}
                     type="text"
-                    placeholder="Enter Contact Number"
+                    placeholder="Enter Contact Number (optional: Gcash registered)"
                     className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
                   />
                 </div>
-                <div>
-                  <input
-                    value={username}
-                    onChange={(e) => setUserName(e.target.value)}
-                    type="text"
-                    placeholder="Enter Username"
-                    className="h-[50px] w-[70%] mb-5 rounded-full pl-5"
-                  />
+                <div className="flex flex-row justify-left  ">
+                  <div className="ml-20">
+                    <input
+                      value={username}
+                      onChange={(e) => setUserName(e.target.value)}
+                      type="text"
+                      placeholder="Enter Username"
+                      className="h-[50px] w-[100%] mb-5 rounded-full pl-5"
+                    />
+                  </div>
+                  <div className="ml-5 w-[25%]">
+                    <select
+                      name="role"
+                      id="role"
+                      className="selectButton"
+                      onChange={(e) => setRole(e.target.value)}
+                      value={role}
+                    >
+                      <option value="" disabled>
+                        Register as...
+                      </option>
+                      <option value="seller">Seller/Vendor</option>
+                      <option value="buyer">Customer/Buyer</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
                   <input

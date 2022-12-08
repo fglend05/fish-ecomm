@@ -143,8 +143,9 @@ function AddItem() {
                   onChange={(e) => setCategory(e.target.value)}
                   value={category}
                 >
-                  <option value="fresh">Fresh</option>
+                  <option value="fresh">Smoked</option>
                   <option value="dried">Dried</option>
+                  <option value="processed">Processed</option>
                 </select>
               </div>
               <div className="pb-2">

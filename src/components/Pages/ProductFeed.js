@@ -2,23 +2,23 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import Product from "./Product";
+import { db } from "../Firebase/firebase";
 import DCBanner from "../../assets/dicban.png";
 
 function ProductFeed() {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
   useEffect(() => {
-    setLoading(true);
-    axios({
-      method: "GET",
-      url: "https://fakestoreapi.com/products",
-    })
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((e) => console.log(e))
-      .finally(() => setLoading(false));
+    const getDataFromFirebase = [];
+    const sub = db.collection("products").onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        getDataFromFirebase.push({ ...doc.data(), key: doc.id });
+      });
+      setData(getDataFromFirebase);
+      setLoading(false);
+    });
+    return () => sub();
   }, []);
 
   return (

@@ -14,7 +14,7 @@ function CheckoutProduct({
   image,
   hasPrime,
 }) {
-  const phPrice = price * 54;
+  const phPrice = price * 1;
 
   const dispatch = useDispatch();
 
@@ -63,7 +63,7 @@ function CheckoutProduct({
           Add To Cart
         </button>
         <button className="button" onClick={removeItemFromCart}>
-          Remove From Cart  
+          Remove From Cart
         </button>
       </div>
     </div>
