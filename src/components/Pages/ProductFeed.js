@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useEffect } from "react";
 import Product from "./Product";
 import { db } from "../Firebase/firebase";

@@ -40,7 +40,6 @@ const Register = () => {
           cart: initalCartValue,
         }).then(() => {
           setsuccessMessage("New user registered successfully");
-          console.log(setsuccessMessage);
           setName("");
           setDeliveryAddress("");
           setNumber("");
@@ -56,17 +55,17 @@ const Register = () => {
         });
       });
     } catch (e) {
-      if (error.message === "Firebase: Error (auth/invalid-email)") {
+      const errorCode = e.code;
+      if (errorCode === "auth/invalid-email") {
         setError("Please fill all required fields");
-        console.log(setError);
+        console.log(errorCode);
       }
-      console.log(e.message);
     }
   };
 
   return (
-    <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
-      <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
+    <div className="w-full h-full items-center justify-center flex bg-login-gradient">
+      <div className="bg-zinc-200 my-5 h-[full] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
         <div className="flex h-[100%]">
           <div className="flex-[0.4] bg-zinc-300 rounded-l-3xl">
             <div className="pl-5 pt-5 text-2xl  font-bold">
@@ -91,6 +90,56 @@ const Register = () => {
               <h2 className="font-bold text-3xl"> Register Now!</h2>
             </div>
             <span className="w-[80%] ml-[70px] mt-3 border-t-[1px] border-black block"></span>
+            <div>
+              {successMessage && (
+                <div
+                  className="flex p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                  role="alert"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 inline w-5 h-5 mr-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Info</span>
+                  <div>
+                    <span className="font-medium">Yey!</span> {successMessage}
+                  </div>
+                </div>
+              )}
+              {error && (
+                <div
+                  className="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                  role="alert"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 inline w-5 h-5 mr-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Info</span>
+                  <div>
+                    <span className="font-medium ">Oops...</span> {error}
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="mt-5 w-[100%] pl-5 text-center pt-5">
               <form className="" onSubmit={register}>
                 <div className="">
@@ -166,7 +215,7 @@ const Register = () => {
                 </div>
                 <button
                   type="submit"
-                  className="px-20 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
+                  className="px-20 py-3 mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
                 >
                   Sign Up
                 </button>
