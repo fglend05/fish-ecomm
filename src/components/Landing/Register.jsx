@@ -4,6 +4,7 @@ import { db } from "../Firebase/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
 import "./Register.css";
+import logo from "../../assets/logo.png";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -67,7 +68,10 @@ const Register = () => {
         <div className="flex h-[100%]">
           <div className="flex-[0.4] bg-zinc-300 rounded-l-3xl">
             <div className="pl-5 pt-5 text-2xl  font-bold">
-              <Link to="/"> FishCommerce.</Link>
+              <Link to="/" className="flex">
+                <img src={logo} alt="" className="w-[75px] h-[75px]" />
+                <div className="pt-5">Dried Bit.</div>
+              </Link>
             </div>
             <p className="text-center pt-[40%] font-bold text-3xl">
               Already Have an Account?

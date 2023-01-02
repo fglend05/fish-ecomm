@@ -11,6 +11,15 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_storageBucket,
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
   appId: process.env.REACT_APP_appId,
+
+  // firebase ni rowell
+  // apiKey: "AIzaSyDbm1wB8xv6ggTM-5EcthMQex-bfjUULhQ",
+  // authDomain: "capstone-project-555c5.firebaseapp.com",
+  // projectId: "capstone-project-555c5",
+  // storageBucket: "capstone-project-555c5.appspot.com",
+  // messagingSenderId: "519367118899",
+  // appId: "1:519367118899:web:096402830941870a7c1346",
+  // measurementId: "G-CV9B6BVH86"
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);

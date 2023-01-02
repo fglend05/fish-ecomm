@@ -3,6 +3,7 @@ import { db } from "../Firebase/firebase";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserAuth } from "../Context/AuthContext";
+import Currency from "react-currency-formatter";
 import Edit from "./Edit";
 
 const Showitem = () => {
@@ -37,7 +38,7 @@ const Showitem = () => {
                 Product Name
               </th>
               <th scope="col" className="py-3 px-6">
-                Desciption
+                Description
               </th>
               <th scope="col" className="py-3 px-6">
                 Price
@@ -72,7 +73,9 @@ const Showitem = () => {
                     {title}
                   </th>
                   <td className="py-3 px-6">{description}</td>
-                  <td className="py-3 px-6">{price}</td>
+                  <td className="py-3 px-6">
+                    <Currency quantity={price} currency="PHP" />
+                  </td>
                   <td className="py-3 px-6">{category}</td>
                   <td className="py-3 px-6">
                     <img src={image} alt="" className="w-[150px] h-[150px]" />
