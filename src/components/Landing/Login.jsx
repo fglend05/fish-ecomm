@@ -5,6 +5,7 @@ import LoginOptions from "../Options/LoginOptions";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import GoogleIcon from "@mui/icons-material/Google";
 import "./Register.css";
+import logo from "../../assets/logo.png";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -49,7 +50,10 @@ function Login() {
         <div className="flex h-full">
           <div className="flex-[0.6]">
             <div className="pl-5 pt-5 text-2xl  font-bold">
-              <Link to="/"> FishCommerce.</Link>
+              <Link to="/" className="flex">
+                <img src={logo} alt="" className="w-[75px] h-[75px]" />
+                <div className="pt-5">Dried Bit.</div>
+              </Link>
             </div>
             <div className="text-center justify-center items-center mt-20 ">
               <p className="font-bold text-5xl mb-3">Login to Your Account</p>
