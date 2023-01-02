@@ -26,7 +26,6 @@ const Register = () => {
     try {
       await createUser(email, password).then((userCredential) => {
         const user = userCredential.user;
-        const initalCartValue = 0;
 
         addDoc(usersCollectionRef, {
           uid: user.uid,
@@ -37,7 +36,6 @@ const Register = () => {
           email: email,
           role: role,
           password: password,
-          cart: initalCartValue,
         }).then(() => {
           setsuccessMessage("New user registered successfully");
           setName("");

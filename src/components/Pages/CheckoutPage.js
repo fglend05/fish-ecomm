@@ -1,7 +1,7 @@
 import React from "react";
 import Navabar from "../Landing/Navabar";
 import DCBanner from "../../assets/dicban.png";
-import Currency, { contextType } from "react-currency-formatter";
+import Currency from "react-currency-formatter";
 import { UserAuth } from "../Context/AuthContext";
 import { useSelector } from "react-redux";
 import { selectItems, selectTotal } from "../features/basketSlice";
@@ -27,23 +27,25 @@ function CheckoutPage() {
             className="object-contain w-[1020] h-[250]"
             alt=""
           />
-
           <div className="flex flex-col p-5 space-y-10 bg-white">
             <h1 className="text-3xl border-b pb-4">Your Shopping Cart</h1>
           </div>
-
           {items.map((item, i) => (
-            <CheckoutProduct
-              key={i}
-              id={item.id}
-              title={item.title}
-              rating={item.rating}
-              price={item.price}
-              description={item.description}
-              category={item.category}
-              image={item.image}
-              hasPrime={item.hasPrime}
-            />
+            <>
+              <CheckoutProduct
+                key={i}
+                sellerName={item.sellerName}
+                id={item.id}
+                title={item.title}
+                rating={item.rating}
+                price={item.price}
+                description={item.description}
+                category={item.category}
+                image={item.image}
+                hasPrime={item.hasPrime}
+                itemQuantity={item.cartQuantity}
+              />
+            </>
           ))}
         </div>
         <div className="flex flex-col bg-white p-10 shadow-md">

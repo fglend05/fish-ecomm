@@ -30,17 +30,20 @@ function ProductFeed() {
 
       {data
         ?.slice(0, 4)
-        .map(({ id, title, price, description, category, image }) => (
-          <Product
-            key={id}
-            id={id}
-            title={title}
-            price={price}
-            description={description}
-            category={category}
-            image={image}
-          />
-        ))}
+        .map(
+          ({ id, title, price, description, category, image, sellerName }) => (
+            <Product
+              key={id}
+              id={id}
+              sellerName={sellerName}
+              title={title}
+              price={price}
+              description={description}
+              category={category}
+              image={image}
+            />
+          )
+        )}
 
       <img
         className="md:col-span-full w-[100%] h-[300px]"
@@ -51,32 +54,46 @@ function ProductFeed() {
       <div className="md:col-span-2">
         {data
           ?.slice(4, 5)
-          .map(({ id, title, price, description, category, image }) => (
+          .map(
+            ({
+              id,
+              title,
+              price,
+              description,
+              category,
+              image,
+              sellerName,
+            }) => (
+              <Product
+                key={id}
+                id={id}
+                sellerName={sellerName}
+                title={title}
+                price={price}
+                description={description}
+                category={category}
+                image={image}
+              />
+            )
+          )}
+      </div>
+
+      {data
+        ?.slice(5, data.length)
+        .map(
+          ({ id, title, price, description, category, image, sellerName }) => (
             <Product
               key={id}
               id={id}
+              sellerName={sellerName}
               title={title}
               price={price}
               description={description}
               category={category}
               image={image}
             />
-          ))}
-      </div>
-
-      {data
-        ?.slice(5, data.length)
-        .map(({ id, title, price, description, category, image }) => (
-          <Product
-            key={id}
-            id={id}
-            title={title}
-            price={price}
-            description={description}
-            category={category}
-            image={image}
-          />
-        ))}
+          )
+        )}
     </div>
   );
 }

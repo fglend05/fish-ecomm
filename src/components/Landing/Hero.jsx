@@ -8,11 +8,10 @@ function Hero() {
       <div className="grid md:grid-cols-2 max-w-[1240px] m-auto">
         <div className="flex flex-col justify-center md:items-start w-full px-2 py-8">
           <p className="py-3 text-5xl md:text-7xl font-bold">
-            Taste the freshness of home
+            You’ll Keep Coming Back For More
           </p>
           <p className="text-2xl py-3 mb-3">
-            Getting your hands on fresh, locally farmed produce has never been
-            easier!
+            Eat Dried Fish As Much As You Want.
           </p>
           <Link to="/market" className="w-[100%] text-left">
             <button className="px-8 py-3 sm:w-[60%] bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">

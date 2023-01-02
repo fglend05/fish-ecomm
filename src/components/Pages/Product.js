@@ -9,7 +9,15 @@ import { db } from "../Firebase/firebase";
 const MAX_RATING = 5;
 const MIN_RATING = 1;
 
-function Product({ id, title, price, description, category, image }) {
+function Product({
+  id,
+  title,
+  price,
+  description,
+  category,
+  image,
+  sellerName,
+}) {
   const { user } = UserAuth();
   const [cart, setCart] = useState([]);
   const dispatch = useDispatch();
@@ -28,6 +36,7 @@ function Product({ id, title, price, description, category, image }) {
       category,
       image,
       hasPrime,
+      sellerName,
     };
 
     dispatch(addToCart(product));
@@ -36,6 +45,7 @@ function Product({ id, title, price, description, category, image }) {
   const [hasPrime] = useState(Math.random() < 0.5);
   return (
     <div className="relative flex flex-col m-5 bg-zinc-100 z-30 p-10">
+      <p className="absolute top-2 left-2 text-xs "> {sellerName} </p>
       <p className="absolute top-2 right-2 text-xs italic text-gray-400">
         {category}
       </p>

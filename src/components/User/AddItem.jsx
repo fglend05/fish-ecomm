@@ -9,6 +9,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
+import { v4 as uuidv4 } from "uuid";
 
 function AddItem() {
   const [title, setTitle] = useState("");
@@ -73,9 +74,12 @@ function AddItem() {
 
   const addProduct = async (e) => {
     e.preventDefault();
+    const uuid = uuidv4();
 
     try {
       const res = await addDoc(collection(db, "products"), {
+        id: uuid,
+        sellerId: user[0].uid,
         sellerName: loggedUser,
         title: title,
         price: price,

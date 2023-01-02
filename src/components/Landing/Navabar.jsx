@@ -11,6 +11,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useSelector } from "react-redux";
 import { selectItems } from "../features/basketSlice";
+import logo from "../../assets/logo.png";
 
 function Navabar() {
   const [nav, setNav] = useState(false);
@@ -35,7 +36,8 @@ function Navabar() {
     <div className="w-screen h-[80px] bg-zinc-200 fixed drop-shadow-lg z-50">
       <div className="px-2 flex justify-between items-center w-full h-full">
         <div className="flex items-center">
-          <h1 className="text-3xl font-bold mr-4 sm:text-4xl">FishCommerce.</h1>
+          <img src={logo} alt="" className="w-[75px] h-[75px]" />
+          <h1 className="text-3xl font-bold mr-4 sm:text-4xl">Dried Bit.</h1>
         </div>
         <div className="hidden md:flex pr-4 text-center">
           <ul className="hidden md:flex cursor-pointer rounded-md">
@@ -45,9 +47,7 @@ function Navabar() {
             <Link to="/market">
               <NavOptions title="Market" />
             </Link>
-            <Link to="/forum">
-              <NavOptions title="Forum" />
-            </Link>
+
             <Link to="/aboutus">
               <NavOptions title="About Us" />
             </Link>
