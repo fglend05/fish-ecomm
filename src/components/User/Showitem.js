@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Product from "../Pages/Product";
 import { db } from "../Firebase/firebase";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { where } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
 import Edit from "./Edit";
 
