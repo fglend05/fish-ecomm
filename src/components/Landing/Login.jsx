@@ -19,7 +19,6 @@ function Login() {
     try {
       await signIn(email, password).then((userCredential) => {
         setsuccessMessage("Login Sucessfull");
-        window.localStorage.setItem("isLoggedIn", true);
         console.log(setsuccessMessage.data);
         setEmail("");
         setPassword("");
@@ -33,21 +32,21 @@ function Login() {
       const errorCode = e.code;
       console.log(errorCode);
 
-      if (e.message === "Firebase: Error (auth/invalid-email).") {
+      if (errorCode === "auth/invalid-email") {
         setError("Please fill all fields");
       }
-      if (e.message === "Firebase: Error (auth/user-not-found).") {
+      if (errorCode === "auth/user-not-found") {
         setError("Email not registered");
       }
-      if (e.message === "Firebase: Error (auth/wrong-password).") {
+      if (errorCode === "auth/wrong-password") {
         setError("Wrong Password");
       }
     }
   };
   return (
     <div className="w-full h-[100vh] items-center justify-center flex bg-login-gradient">
-      <div className="bg-zinc-200 my-5 h-[85vh] w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
-        <div className="flex h-[100%]">
+      <div className="bg-zinc-200 my-5 h-full  w-[70vw] rounded-3xl shadow-xl shadow-zinc-500">
+        <div className="flex h-full">
           <div className="flex-[0.6]">
             <div className="pl-5 pt-5 text-2xl  font-bold">
               <Link to="/"> FishCommerce.</Link>
@@ -60,6 +59,56 @@ function Login() {
                 <LoginOptions Icon={GoogleIcon} color="blue" />
               </div>
               <p className="midline">or</p>
+              <div>
+                {successMessage && (
+                  <div
+                    className="flex p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                    role="alert"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 inline w-5 h-5 mr-3"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="sr-only">Info</span>
+                    <div>
+                      <span className="font-medium">Yey!</span> {successMessage}
+                    </div>
+                  </div>
+                )}
+                {error && (
+                  <div
+                    className="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                    role="alert"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 inline w-5 h-5 mr-3"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="sr-only">Info</span>
+                    <div>
+                      <span className="font-medium ">Oops...</span> {error}
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="mt-5">
                 <form onSubmit={handleSignIn}>
                   <div>
@@ -82,7 +131,7 @@ function Login() {
                   </div>
                   <button
                     type="submit"
-                    className="px-10 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
+                    className="mb-5 px-10 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full"
                   >
                     Login
                   </button>

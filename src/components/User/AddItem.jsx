@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import DatePicker from "react-date-picker";
 import { db, storage } from "../Firebase/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {
@@ -10,6 +9,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
+import { v4 as uuidv4 } from "uuid";
 
 function AddItem() {
   const [title, setTitle] = useState("");
@@ -17,7 +17,6 @@ function AddItem() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [size, setSize] = useState("");
-  const [date, setDate] = useState(new Date());
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
   const [progress, SetProgress] = useState(null);
@@ -75,8 +74,12 @@ function AddItem() {
 
   const addProduct = async (e) => {
     e.preventDefault();
+    const uuid = uuidv4();
+
     try {
       const res = await addDoc(collection(db, "products"), {
+        id: uuid,
+        sellerId: user[0].uid,
         sellerName: loggedUser,
         title: title,
         price: price,
@@ -84,7 +87,6 @@ function AddItem() {
         description: description,
         size: size,
         image: imgURL,
-        productDate: date,
         timestamp: serverTimestamp(),
       })
         .then(() => {
@@ -93,8 +95,6 @@ function AddItem() {
           setDescription("");
           setCategory("");
           setSize("");
-          setFile(null);
-          setDate(new Date());
           setFile(null);
           setImgURL(null);
           SetProgress(null);
@@ -182,13 +182,6 @@ function AddItem() {
                   <option value="medium">Medium</option>
                   <option value="large">Large</option>
                 </select>
-              </div>
-              <div>
-                <h2>Product Date</h2>
-                <DatePicker
-                  onChange={(e) => setDate(e.target.value)}
-                  value={date}
-                />
               </div>
             </div>
           </div>
