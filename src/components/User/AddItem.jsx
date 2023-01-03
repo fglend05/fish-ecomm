@@ -9,6 +9,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { UserAuth } from "../Context/AuthContext";
+import icon from "../../assets/folder-icon.png";
 import { v4 as uuidv4 } from "uuid";
 
 function AddItem() {
@@ -24,6 +25,7 @@ function AddItem() {
   const [rating, setRating] = useState("");
   const [hasPrime, setHasPrime] = useState("");
   const [random, setRandom] = useState(null);
+  const [source, setSource] = useState("");
 
   const { user } = UserAuth();
   const loggedUser = user[0].displayName;
@@ -33,12 +35,21 @@ function AddItem() {
   const productImgHandler = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile && types.includes(selectedFile.type)) {
+      previewFile(selectedFile);
       setFile(selectedFile);
       setError("");
     } else {
       setFile(null);
       setError("Only png and jpg are allowed");
     }
+  };
+
+  const previewFile = (selectedFile) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = () => {
+      setSource(reader.result);
+    };
   };
 
   useEffect(() => {
@@ -167,8 +178,15 @@ function AddItem() {
               </div>
             </div>
             <div className="flex-[0.5]">
-              <div>
+              <div className="mx-auto">
                 <h2>Product Images</h2>
+
+                <img
+                  src={source ? source : icon}
+                  alt=""
+                  className="p-1 border rounded w-[150]"
+                />
+
                 <input type="file" onChange={productImgHandler} />
               </div>
               <div>
