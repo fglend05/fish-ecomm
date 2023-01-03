@@ -5,14 +5,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { UserAuth } from "../Context/AuthContext";
 import Currency from "react-currency-formatter";
 import Edit from "./Edit";
+import { collection, doc, getDocs, deleteDoc } from "firebase/firestore";
+import Spinner from "./Spinner";
 
 const Showitem = () => {
   const [loading, setLoading] = useState(true);
+  const [formId, setFormId] = useState([]);
   const [data, setData] = useState();
+  const [rows, setRows] = useState([]);
   const { user } = UserAuth();
   const [openModal, setOpenModal] = useState(false);
+  const collectionRef = collection(db, "products");
 
   useEffect(() => {
+    getDisplayData();
+    getProductData();
+  }, []);
+
+  const getProductData = async () => {
+    const data = await getDocs(collectionRef);
+    setRows(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
+  const getDisplayData = () => {
     const getDataFromFirebase = [];
     const sub = db
       .collection("products")
@@ -24,12 +39,49 @@ const Showitem = () => {
         setData(getDataFromFirebase);
         setLoading(false);
       });
-    return () => sub();
-  }, []);
+  };
+  const handleModal = ({
+    id,
+    title,
+    price,
+    description,
+    category,
+    image,
+    sellerName,
+  }) => {
+    const data = {
+      id: id,
+      title: title,
+      price: price,
+      description: description,
+      category: category,
+      image: image,
+      sellerName: sellerName,
+    };
+    setFormId(data);
+    setOpenModal(true);
+  };
+
+  const handleDelete = async ({ id }) => {
+    const dataRef = doc(db, "products", id);
+    if (window.confirm("Delete file?")) {
+      try {
+        await deleteDoc(dataRef);
+        setData(data.filter((data) => data.id !== id));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <div className="">
-      <Edit open={openModal} onClose={() => setOpenModal(false)} />
+      {loading && (
+        <>
+          <Spinner />
+        </>
+      )}
+      <Edit open={openModal} onClose={() => setOpenModal(false)} fid={formId} />
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg w-full">
         <table className="w-full text-sm text-left text-gray-500 ">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -83,11 +135,26 @@ const Showitem = () => {
                   <td className="py-3 px-6">
                     <button
                       className="mr-3 hover:text-green-600"
-                      onClick={() => setOpenModal(true)}
+                      onClick={() => {
+                        handleModal({
+                          id,
+                          title,
+                          price,
+                          description,
+                          category,
+                          image,
+                          sellerName,
+                        });
+                      }}
                     >
                       <EditIcon />
                     </button>
-                    <button className="hover:text-red-600">
+                    <button
+                      className="hover:text-red-600"
+                      onClick={() => {
+                        handleDelete({ id });
+                      }}
+                    >
                       <DeleteIcon />
                     </button>
                   </td>
@@ -97,11 +164,6 @@ const Showitem = () => {
           )}
         </table>
       </div>
-      {loading && (
-        <>
-          <h1>Loading...</h1>
-        </>
-      )}
     </div>
   );
 };
