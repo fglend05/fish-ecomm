@@ -19,12 +19,13 @@ const Showitem = () => {
 
   useEffect(() => {
     getDisplayData();
-    getProductData();
+    getProductDocId();
   }, []);
 
-  const getProductData = async () => {
+  const getProductDocId = async () => {
     const data = await getDocs(collectionRef);
-    setRows(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setRows(data.docs.map((doc) => ({ id: doc.id, ...doc.data })));
+    // console.log(rows);
   };
 
   const getDisplayData = () => {
@@ -34,9 +35,10 @@ const Showitem = () => {
       .where("sellerId", "==", user[0].uid)
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          getDataFromFirebase.push({ ...doc.data(), key: doc.id });
+          getDataFromFirebase.push({ ...doc.data(), id: doc.id, key: doc.id });
         });
         setData(getDataFromFirebase);
+        console.log(getDataFromFirebase);
         setLoading(false);
       });
   };
