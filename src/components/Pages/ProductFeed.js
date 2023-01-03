@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Product from "./Product";
 import { db } from "../Firebase/firebase";
 import DCBanner from "../../assets/dicban.png";
+import Spinner from "../User/Spinner";
 
 function ProductFeed() {
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ function ProductFeed() {
     <div className="grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:-mt-52 mx-auto">
       {loading && (
         <>
-          <h1>Products Loading</h1>
+          <Spinner />
         </>
       )}
 
