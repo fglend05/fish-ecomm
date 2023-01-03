@@ -13,7 +13,7 @@ function ProductFeed() {
     const getDataFromFirebase = [];
     const sub = db.collection("products").onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        getDataFromFirebase.push({ ...doc.data(), key: doc.id });
+        getDataFromFirebase.push({ ...doc.data(), id: doc.id, key: doc.id });
       });
       setData(getDataFromFirebase);
       setLoading(false);

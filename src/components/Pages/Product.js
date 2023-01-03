@@ -4,7 +4,9 @@ import Currency from "react-currency-formatter";
 import { useDispatch } from "react-redux";
 import { UserAuth } from "../Context/AuthContext";
 import { addToCart } from "../features/basketSlice";
-import { db } from "../Firebase/firebase";
+import { auth, db } from "../Firebase/firebase";
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
@@ -26,6 +28,9 @@ function Product({
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
   );
 
+  const uid = user[0].id;
+
+  let Products;
   const addItemToCart = () => {
     const product = {
       id,
@@ -39,7 +44,22 @@ function Product({
       sellerName,
     };
 
-    dispatch(addToCart(product));
+    // dispatch(addToCart(product));
+
+    if (uid !== null) {
+      // console.log(product);
+      Products = product;
+      Products["qty"] = 1;
+      Products["TotalProductPrice"] = Products.qty * price;
+      db.collection("Cart " + uid)
+        .doc(id)
+        .set(Products)
+        .then(() => {
+          console.log("added to cart");
+        });
+    } else {
+      <Navigate to="/" />;
+    }
   };
 
   const [hasPrime] = useState(Math.random() < 0.5);

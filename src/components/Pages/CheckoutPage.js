@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navabar from "../Landing/Navabar";
 import DCBanner from "../../assets/dicban.png";
 import Currency from "react-currency-formatter";
@@ -6,12 +6,43 @@ import { UserAuth } from "../Context/AuthContext";
 import { useSelector } from "react-redux";
 import { selectItems, selectTotal } from "../features/basketSlice";
 import CheckoutProduct from "./CheckoutProduct";
+import { db } from "../Firebase/firebase";
 
 function CheckoutPage() {
   const { user } = UserAuth();
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const phPrice = total * 1;
+
+  const [cartProducts, setCartProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await db.collection("Cart " + user[0].id).onSnapshot((snapshot) => {
+          const newCart = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setCartProducts(newCart);
+        });
+      } else {
+        console.log("Please sign in");
+      }
+    };
+    fetchData();
+  }, []);
+
+  //Joining and getting total
+  const qty = cartProducts.map((cartProduct) => {
+    return cartProduct.qty;
+  });
+  const price = cartProducts.map((cartProduct) => {
+    return cartProduct.TotalProductPrice;
+  });
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  const totalQty = qty.reduce(reducer, 0);
+  const totalPrice = price.reduce(reducer, 0);
 
   const createCheckoutSession = async (e) => {
     e.preventDefault();
@@ -30,7 +61,7 @@ function CheckoutPage() {
           <div className="flex flex-col p-5 space-y-10 bg-white">
             <h1 className="text-3xl border-b pb-4">Your Shopping Cart</h1>
           </div>
-          {items.map((item, i) => (
+          {cartProducts.map((item, i) => (
             <>
               <CheckoutProduct
                 key={i}
@@ -43,18 +74,18 @@ function CheckoutPage() {
                 category={item.category}
                 image={item.image}
                 hasPrime={item.hasPrime}
-                itemQuantity={item.cartQuantity}
+                qty={item.qty}
               />
             </>
           ))}
         </div>
         <div className="flex flex-col bg-white p-10 shadow-md">
-          {items.length > 0 && (
+          {cartProducts.length > 0 && (
             <>
               <h2 className="whitespace-nowrap">
-                Subtotal ({items.length} items):
+                Subtotal ({totalQty} items):
                 <span className="font-bold pl-1">
-                  <Currency quantity={total} currency="PHP" />
+                  <Currency quantity={totalPrice} currency="PHP" />
                 </span>
               </h2>
               <button

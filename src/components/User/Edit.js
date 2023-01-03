@@ -10,10 +10,6 @@ const Edit = ({ open, onClose, fid }) => {
 
   useEffect(() => {
     // console.log(fid.id);
-    setTitle(fid.title);
-    setPrice(fid.price);
-    setDescription(fid.description);
-    setCategory(fid.category);
   }, []);
 
   const handleUpdate = async (e) => {
@@ -77,7 +73,7 @@ const Edit = ({ open, onClose, fid }) => {
               <h3 className="mb-4 text-xl font-medium text-gray-900 ">
                 Edit Item
               </h3>
-              <form action="" className="space-y-6" id={fid}>
+              <form action className="space-y-6" id={fid}>
                 <div>
                   <label
                     htmlFor="title"
@@ -86,6 +82,7 @@ const Edit = ({ open, onClose, fid }) => {
                     Product Name
                   </label>
                   <input
+                    placeholder={fid.title}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     name="title"
@@ -101,6 +98,7 @@ const Edit = ({ open, onClose, fid }) => {
                     Price
                   </label>
                   <input
+                    placeholder={fid.price}
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     name="title"
@@ -116,6 +114,7 @@ const Edit = ({ open, onClose, fid }) => {
                     Description
                   </label>
                   <input
+                    placeholder={fid.description}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     name="title"
@@ -131,6 +130,7 @@ const Edit = ({ open, onClose, fid }) => {
                     Category
                   </label>
                   <input
+                    placeholder={fid.category}
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     name="title"

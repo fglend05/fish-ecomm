@@ -1,5 +1,6 @@
 import React from "react";
 import StarRateIcon from "@mui/icons-material/StarRate";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Currency from "react-currency-formatter";
 import { useDispatch } from "react-redux";
 import {
@@ -7,6 +8,9 @@ import {
   removeFromCart,
   decreaseItem,
 } from "../features/basketSlice";
+import Product from "./Product";
+import { UserAuth } from "../Context/AuthContext";
+import { db } from "../Firebase/firebase";
 
 function CheckoutProduct({
   id,
@@ -17,13 +21,15 @@ function CheckoutProduct({
   category,
   image,
   hasPrime,
-  itemQuantity,
+  qty,
   sellerName,
 }) {
   const phPrice = price * 1;
+  const { user } = UserAuth();
 
   const dispatch = useDispatch();
-
+  const uid = user[0].id;
+  let Products;
   const addItemToCart = () => {
     const product = {
       id,
@@ -34,10 +40,26 @@ function CheckoutProduct({
       category,
       image,
       hasPrime,
-      itemQuantity,
+      qty,
       sellerName,
     };
-    dispatch(addToCart(product));
+    // dispatch(addToCart(product));
+    // console.log(product);
+
+    Products = product;
+    Products.qty = Products.qty + 1;
+    Products.TotalProductPrice = Products.qty * Products.price;
+
+    if (user) {
+      db.collection("Cart " + uid)
+        .doc(id)
+        .update(Products)
+        .then(() => {
+          console.log("Added to cart");
+        });
+    } else {
+      console.log("Please Login");
+    }
   };
 
   const decreaseItemFromCart = () => {
@@ -50,14 +72,44 @@ function CheckoutProduct({
       category,
       image,
       hasPrime,
-      itemQuantity,
+      qty,
       sellerName,
     };
-    dispatch(decreaseItem(product));
+    // dispatch(decreaseItem(product));
+
+    Products = product;
+    if (Products.qty > 1) {
+      Products.qty = Products.qty - 1;
+      Products.TotalProductPrice = Products.qty * Products.price;
+
+      if (user) {
+        db.collection("Cart " + uid)
+          .doc(id)
+          .update(Products)
+          .then(() => {
+            console.log("Decrement to cart");
+          });
+      } else {
+        console.log("Please Login");
+      }
+    }
   };
 
   const removeItemFromCart = () => {
-    dispatch(removeFromCart({ id }));
+    const product = { id };
+
+    if (user) {
+      db.collection("Cart " + uid)
+        .doc(product.id)
+        .delete()
+        .then(() => {
+          console.log("Deleted to cart");
+        });
+    } else {
+      console.log("Please Login");
+    }
+
+    // dispatch(removeFromCart({ id }));
   };
   return (
     <>
@@ -91,7 +143,7 @@ function CheckoutProduct({
           )}
         </div>
 
-        <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+        <div className="flex h-10 w-full rounded-lg relative bg-transparent mt-1">
           <button
             className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none"
             onClick={addItemToCart}
@@ -99,13 +151,17 @@ function CheckoutProduct({
             <span className="m-auto text-2xl font-thin">+</span>
           </button>
           <span className="pl-[30%] outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700">
-            {itemQuantity}
+            {qty}
           </span>
           <button
-            className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
+            className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
             onClick={decreaseItemFromCart}
           >
             <span className="m-auto text-2xl font-thin">-</span>
+          </button>
+
+          <button className="pl-5" onClick={removeItemFromCart}>
+            <DeleteIcon />
           </button>
         </div>
       </div>

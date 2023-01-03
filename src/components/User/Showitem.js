@@ -19,14 +19,7 @@ const Showitem = () => {
 
   useEffect(() => {
     getDisplayData();
-    getProductDocId();
   }, []);
-
-  const getProductDocId = async () => {
-    const data = await getDocs(collectionRef);
-    setRows(data.docs.map((doc) => ({ id: doc.id, ...doc.data })));
-    // console.log(rows);
-  };
 
   const getDisplayData = () => {
     const getDataFromFirebase = [];
@@ -38,7 +31,6 @@ const Showitem = () => {
           getDataFromFirebase.push({ ...doc.data(), id: doc.id, key: doc.id });
         });
         setData(getDataFromFirebase);
-        console.log(getDataFromFirebase);
         setLoading(false);
       });
   };
