@@ -9,7 +9,7 @@ const Edit = ({ open, onClose, fid }) => {
   const [image, setImage] = useState();
 
   useEffect(() => {
-    console.log(fid.id);
+    // console.log(fid.id);
     setTitle(fid.title);
     setPrice(fid.price);
     setDescription(fid.description);
@@ -142,9 +142,7 @@ const Edit = ({ open, onClose, fid }) => {
                   <button
                     type="submit"
                     className="defButton"
-                    onClick={() => {
-                      handleUpdate(fid.id);
-                    }}
+                    onClick={handleUpdate}
                   >
                     Update
                   </button>
