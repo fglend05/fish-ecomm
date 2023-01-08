@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../Context/AuthContext";
@@ -12,6 +12,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useSelector } from "react-redux";
 import { selectItems } from "../features/basketSlice";
 import logo from "../../assets/logo.png";
+import { db } from "../Firebase/firebase";
 
 function Navabar() {
   const [nav, setNav] = useState(false);
@@ -20,6 +21,25 @@ function Navabar() {
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
   const items = useSelector(selectItems);
+  const [cartProducts, setCartProducts] = useState([]);
+
+  const uid = (user ?? [])[0];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
+          const newCart = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setCartProducts(newCart);
+        });
+      } else {
+        console.log("Please sign in");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -86,7 +106,7 @@ function Navabar() {
                               className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
                               aria-hidden="true"
                             />
-                            View Cart ({items.length}){/* ({user[0].cart}) */}
+                            View Cart ({cartProducts.length})
                           </button>
                         </Link>
                       </div>
@@ -97,7 +117,7 @@ function Navabar() {
                               className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
                               aria-hidden="true"
                             />
-                            Manage Account ({user[0].email})
+                            Manage Account ({uid.email})
                           </button>
                         </Link>
                         <button
