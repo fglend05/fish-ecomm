@@ -27,8 +27,8 @@ function CheckoutProduct({
   const phPrice = price * 1;
   const { user } = UserAuth();
 
-  const dispatch = useDispatch();
-  const uid = user[0].id;
+  // const dispatch = useDispatch();
+  const uid = (user ?? [])[0];
   let Products;
   const addItemToCart = () => {
     const product = {
@@ -51,7 +51,7 @@ function CheckoutProduct({
     Products.TotalProductPrice = Products.qty * Products.price;
 
     if (user) {
-      db.collection("Cart " + uid)
+      db.collection("Cart " + uid.id)
         .doc(id)
         .update(Products)
         .then(() => {
@@ -83,7 +83,7 @@ function CheckoutProduct({
       Products.TotalProductPrice = Products.qty * Products.price;
 
       if (user) {
-        db.collection("Cart " + uid)
+        db.collection("Cart " + uid.id)
           .doc(id)
           .update(Products)
           .then(() => {
@@ -99,7 +99,7 @@ function CheckoutProduct({
     const product = { id };
 
     if (user) {
-      db.collection("Cart " + uid)
+      db.collection("Cart " + uid.id)
         .doc(product.id)
         .delete()
         .then(() => {

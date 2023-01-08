@@ -17,6 +17,8 @@ const Showitem = () => {
   const [openModal, setOpenModal] = useState(false);
   const collectionRef = collection(db, "products");
 
+  const uid = (user ?? [])[0];
+
   useEffect(() => {
     getDisplayData();
   }, []);
@@ -25,7 +27,7 @@ const Showitem = () => {
     const getDataFromFirebase = [];
     const sub = db
       .collection("products")
-      .where("sellerId", "==", user[0].uid)
+      .where("sellerId", "==", uid.uid)
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getDataFromFirebase.push({ ...doc.data(), id: doc.id, key: doc.id });

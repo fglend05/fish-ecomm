@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { selectItems, selectTotal } from "../features/basketSlice";
 import CheckoutProduct from "./CheckoutProduct";
 import { db } from "../Firebase/firebase";
+import { Cod } from "./Cod";
 
 function CheckoutPage() {
   const { user } = UserAuth();
@@ -15,11 +16,14 @@ function CheckoutPage() {
   const phPrice = total * 1;
 
   const [cartProducts, setCartProducts] = useState([]);
+  const [checkModal, setCheckModal] = useState(false);
+
+  const uid = (user ?? [])[0];
 
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        await db.collection("Cart " + user[0].id).onSnapshot((snapshot) => {
+        await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
           const newCart = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
@@ -46,6 +50,8 @@ function CheckoutPage() {
 
   const createCheckoutSession = async (e) => {
     e.preventDefault();
+
+    setCheckModal(true);
   };
 
   return (
@@ -101,6 +107,7 @@ function CheckoutPage() {
               </button>
             </>
           )}
+          {checkModal === true && <Cod onClose={() => setCheckModal(false)} />}
         </div>
       </div>
     </div>

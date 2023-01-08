@@ -20,7 +20,7 @@ function Product({
   image,
   sellerName,
 }) {
-  const { user } = UserAuth();
+  const { user } = UserAuth([]);
   const [cart, setCart] = useState([]);
   const dispatch = useDispatch();
   const phPrice = price * 1;
@@ -28,7 +28,7 @@ function Product({
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
   );
 
-  const uid = user[0].id;
+  const uid = (user ?? [])[0];
 
   let Products;
   const addItemToCart = () => {
@@ -46,19 +46,19 @@ function Product({
 
     // dispatch(addToCart(product));
 
-    if (uid !== null) {
+    if (uid.id !== null) {
       // console.log(product);
       Products = product;
       Products["qty"] = 1;
       Products["TotalProductPrice"] = Products.qty * price;
-      db.collection("Cart " + uid)
+      db.collection("Cart " + uid.id)
         .doc(id)
         .set(Products)
         .then(() => {
           console.log("added to cart");
         });
     } else {
-      <Navigate to="/" />;
+      console.log("not signed in");
     }
   };
 

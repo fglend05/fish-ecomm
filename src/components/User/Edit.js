@@ -73,7 +73,7 @@ const Edit = ({ open, onClose, fid }) => {
               <h3 className="mb-4 text-xl font-medium text-gray-900 ">
                 Edit Item
               </h3>
-              <form action className="space-y-6" id={fid}>
+              <form onSubmit={handleUpdate} className="space-y-6" id={fid.id}>
                 <div>
                   <label
                     htmlFor="title"
@@ -139,11 +139,7 @@ const Edit = ({ open, onClose, fid }) => {
                   />
                 </div>
                 <div>
-                  <button
-                    type="submit"
-                    className="defButton"
-                    onClick={handleUpdate}
-                  >
+                  <button type="submit" className="defButton">
                     Update
                   </button>
                 </div>
