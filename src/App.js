@@ -26,7 +26,7 @@ function App() {
             path="/"
             element={
               <>
-                <Navabar /> <Hero /> <Products />
+                <Navabar /> <Hero />
               </>
             }
           />
