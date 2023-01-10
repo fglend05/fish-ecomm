@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { UserAuth } from "../Context/AuthContext";
 import { db } from "../Firebase/firebase";
+import Spinner from "../User/Spinner";
+import { OrderSpec } from "./OrderSpec";
 
 export const OrderDetails = () => {
   const { user } = UserAuth();
   const [cartProducts, setCartProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const uid = (user ?? [])[0];
 
@@ -17,6 +20,7 @@ export const OrderDetails = () => {
             ...doc.data(),
           }));
           setCartProducts(newCart);
+          setLoading(false);
         });
       } else {
         console.log("Please sign in");
@@ -24,5 +28,28 @@ export const OrderDetails = () => {
     };
     fetchData();
   }, []);
-  return <div></div>;
+  return (
+    <div>
+      {loading && (
+        <>
+          <Spinner />
+        </>
+      )}
+
+      <div className="">
+        {cartProducts.map((item, i) => (
+          <>
+            <OrderSpec
+              key={i}
+              sellerName={item.sellerName}
+              image={item.image}
+              title={item.title}
+              qty={item.qty}
+              description={item.description}
+            />
+          </>
+        ))}
+      </div>
+    </div>
+  );
 };
