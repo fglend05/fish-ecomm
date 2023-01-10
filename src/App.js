@@ -14,6 +14,7 @@ import Account from "./components/User/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CheckoutPage from "./components/Pages/CheckoutPage";
 import Footer from "./components/Landing/Footer";
+import { MyOrders } from "./components/Pages/MyOrders";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             }
           />
           <Route path="/market" element={<Market />} />
+          <Route path="/orders" element={<MyOrders />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/aboutus" element={<AboutUs />} />
