@@ -14,6 +14,7 @@ function CheckoutPage() {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const phPrice = total * 1;
+  const [formData, setFormData] = useState();
 
   const [cartProducts, setCartProducts] = useState([]);
   const [checkModal, setCheckModal] = useState(false);
@@ -48,15 +49,18 @@ function CheckoutPage() {
   const totalQty = qty.reduce(reducer, 0);
   const totalPrice = price.reduce(reducer, 0);
 
-  const createCheckoutSession = async (e) => {
-    e.preventDefault();
-
+  const createCheckoutSession = async ({ totalQty, totalPrice }) => {
+    const qty = { totalQty, totalPrice };
+    setFormData(qty);
     setCheckModal(true);
   };
 
   return (
     <div>
       <Navabar />
+      {checkModal === true && (
+        <Cod onClose={() => setCheckModal(false)} formData={formData} />
+      )}
       <div className="pt-20 lg:flex max-w-screen-2xl mx-auto">
         <div className="flex-grow m-5 shadow-sm">
           <img
@@ -96,7 +100,9 @@ function CheckoutPage() {
               </h2>
               <button
                 role="link"
-                onClick={createCheckoutSession}
+                onClick={() => {
+                  createCheckoutSession({ totalQty, totalPrice });
+                }}
                 disabled={!user}
                 className={`button mt-2 ${
                   !user &&
@@ -107,7 +113,6 @@ function CheckoutPage() {
               </button>
             </>
           )}
-          {checkModal === true && <Cod onClose={() => setCheckModal(false)} />}
         </div>
       </div>
     </div>

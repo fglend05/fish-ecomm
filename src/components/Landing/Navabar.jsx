@@ -8,6 +8,7 @@ import NavOptionsMobile from "../Options/NavOptionsMobile";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useSelector } from "react-redux";
 import { selectItems } from "../features/basketSlice";
@@ -22,24 +23,40 @@ function Navabar() {
   const navigate = useNavigate();
   const items = useSelector(selectItems);
   const [cartProducts, setCartProducts] = useState([]);
+  const [cartProductsChecked, setCartProductsChecked] = useState([]);
 
   const uid = (user ?? [])[0];
   useEffect(() => {
-    const fetchData = async () => {
-      if (user) {
-        await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
-          const newCart = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setCartProducts(newCart);
-        });
-      } else {
-        console.log("Please sign in");
-      }
-    };
     fetchData();
+    fetchCartData();
   }, []);
+
+  const fetchData = async () => {
+    if (user) {
+      await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
+        const newCart = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCartProducts(newCart);
+      });
+    } else {
+      console.log("Please sign in");
+    }
+  };
+  const fetchCartData = async () => {
+    if (user) {
+      await db.collection("Buyer-cart " + uid.id).onSnapshot((snapshot) => {
+        const newCarts = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCartProductsChecked(newCarts);
+      });
+    } else {
+      console.log("Please sign in");
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -107,6 +124,15 @@ function Navabar() {
                               aria-hidden="true"
                             />
                             View Cart ({cartProducts.length})
+                          </button>
+                        </Link>
+                        <Link to="/orders">
+                          <button className="group flex items-center px-4 w-[100%]  py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white  ease-in-out duration-300">
+                            <ShoppingCartCheckoutIcon
+                              className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
+                              aria-hidden="true"
+                            />
+                            My Orders ({cartProductsChecked.length})
                           </button>
                         </Link>
                       </div>
