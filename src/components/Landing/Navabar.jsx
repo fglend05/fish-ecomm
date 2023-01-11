@@ -132,7 +132,7 @@ function Navabar() {
                               className="mr-5 h-5 w-5 text-gray-400 group-hover:text-white ease-in-out duration-300"
                               aria-hidden="true"
                             />
-                            My Orders ({cartProductsChecked.length})
+                            Orders ({cartProductsChecked.length})
                           </button>
                         </Link>
                       </div>
