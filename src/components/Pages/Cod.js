@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../Context/AuthContext";
 import { auth, db } from "../Firebase/firebase";
@@ -12,31 +12,51 @@ export const Cod = ({ onClose, formData }) => {
   const [totalPrice] = useState(formData.totalPrice);
   const [status] = useState("toPay");
   const [totalQty] = useState(formData.totalQty);
+  const [cartProducts, setCartProducts] = useState([]);
   const nav = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
+          const newCart = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setCartProducts(newCart);
+        });
+      } else {
+        console.log("Please sign in");
+      }
+    };
+    fetchData();
+  }, []);
   const handleCartSubmit = async (e) => {
     e.preventDefault();
-
-    await db.collection("Buyer-Personal-Info").add({
-      Name: uid.displayName,
-      Email: uid.email,
-      CellNo: number,
-      DeliveryAddress: deliveryAddress,
-      CartQty: totalQty,
-      CartPrice: totalPrice,
-    });
-    const cartData = await db.collection("Cart " + uid.id).get();
-    for (var snap of cartData.docs) {
-      var data = snap.data();
-      data.ID = snap.id;
-      await db.collection("Buyer-cart " + uid.id).add(data);
-      await db
-        .collection("Cart " + uid.id)
-        .doc(snap.id)
-        .delete();
+    try {
+      await db.collection("Buyer-Personal-Info").add({
+        Name: uid.displayName,
+        Email: uid.email,
+        CellNo: number,
+        DeliveryAddress: deliveryAddress,
+        CartQty: totalQty,
+        CartPrice: totalPrice,
+      });
+      const cartData = await db.collection("Cart " + uid.id).get();
+      for (var snap of cartData.docs) {
+        var data = snap.data();
+        data.ID = snap.id;
+        await db.collection("Buyer-cart " + uid.id).add(data);
+        await db
+          .collection("Cart " + uid.id)
+          .doc(snap.id)
+          .delete();
+      }
+      onClose();
+      nav("/");
+    } catch (err) {
+      console.log(err);
     }
-    onClose();
-    nav("/");
   };
   return (
     <div className="">

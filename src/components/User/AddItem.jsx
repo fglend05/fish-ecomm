@@ -18,6 +18,7 @@ function AddItem() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [size, setSize] = useState("");
+  const [stock, setStock] = useState("");
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
   const [progress, SetProgress] = useState(null);
@@ -92,6 +93,7 @@ function AddItem() {
         id: uuid,
         sellerId: user[0].uid,
         sellerName: loggedUser,
+        stock: stock,
         title: title,
         price: price,
         category: category,
@@ -104,6 +106,7 @@ function AddItem() {
           setTitle("");
           setPrice("");
           setDescription("");
+          setStock("");
           setCategory("");
           setSize("");
           setFile(null);
@@ -200,6 +203,15 @@ function AddItem() {
                   <option value="medium">Medium</option>
                   <option value="large">Large</option>
                 </select>
+              </div>
+              <div className="pb-2">
+                <h2>Stock Available (Per Kilo)</h2>
+                <input
+                  type="number"
+                  className="inputText"
+                  onChange={(e) => setStock(e.target.valueAsNumber)}
+                  value={stock}
+                />
               </div>
             </div>
           </div>

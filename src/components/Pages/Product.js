@@ -19,6 +19,8 @@ function Product({
   category,
   image,
   sellerName,
+  stock,
+  size,
 }) {
   const { user } = UserAuth([]);
   const [cart, setCart] = useState([]);
@@ -69,14 +71,15 @@ function Product({
       <p className="absolute top-2 right-2 text-xs italic text-gray-400">
         {category}
       </p>
-
       <img
         src={image}
         alt="Product IMG"
         className="object-contain w-[200px] h-[200px] mx-7  "
       />
-
-      <h4 className="my-3 line-clamp-2">{title}</h4>
+      <h4 className="mt-3 line-clamp-2">{title}</h4>
+      <div className="flex mb-3">
+        <span className="text-sm"> Size: {size}</span>
+      </div>
 
       <div className="flex">
         {Array(rating)
@@ -85,13 +88,17 @@ function Product({
             <StarRateIcon className="h-5 text-yellow-500" />
           ))}
       </div>
-
       <p className="text-xs my-2 line-clamp-2">{description}</p>
+      <div className="flex place-content-evenly">
+        <div className="mb-5">
+          <Currency quantity={phPrice} currency="PHP" />{" "}
+          <span className="text-xs"> /kg</span>
+        </div>
 
-      <div className="mb-5">
-        <Currency quantity={phPrice} currency="PHP" />
+        <div className="mb-5">
+          Available: {stock} <span className="text-xs"> kg/kgs</span>
+        </div>
       </div>
-
       {hasPrime && (
         <div className="flex items-center space-x-2 -mt-5">
           <img className="w-12" src="" alt="" />
@@ -109,9 +116,26 @@ function Product({
           Login to checkout
         </button>
       ) : (
-        <button className="mt-auto button" onClick={addItemToCart}>
-          Add to cart
-        </button>
+        <>
+          {stock === 0 ? (
+            <>
+              <button
+                className={`button mt-2 ${
+                  stock === 0 &&
+                  "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"
+                }`}
+                disabled
+                onClick={addItemToCart}
+              >
+                No stock available
+              </button>
+            </>
+          ) : (
+            <button className="mt-auto button" onClick={addItemToCart}>
+              Add to cart
+            </button>
+          )}
+        </>
       )}
     </div>
   );

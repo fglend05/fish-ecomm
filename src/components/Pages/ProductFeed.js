@@ -32,11 +32,23 @@ function ProductFeed() {
       {data
         ?.slice(0, 4)
         .map(
-          ({ id, title, price, description, category, image, sellerName }) => (
+          ({
+            id,
+            title,
+            price,
+            description,
+            category,
+            image,
+            sellerName,
+            stock,
+            size,
+          }) => (
             <Product
               key={id}
               id={id}
+              size={size}
               sellerName={sellerName}
+              stock={stock}
               title={title}
               price={price}
               description={description}
@@ -64,16 +76,19 @@ function ProductFeed() {
               category,
               image,
               sellerName,
+              stock,
+              size,
             }) => (
               <Product
                 key={id}
-                id={id}
                 sellerName={sellerName}
+                size={size}
                 title={title}
                 price={price}
                 description={description}
                 category={category}
                 image={image}
+                stock={stock}
               />
             )
           )}
@@ -82,16 +97,28 @@ function ProductFeed() {
       {data
         ?.slice(5, data.length)
         .map(
-          ({ id, title, price, description, category, image, sellerName }) => (
+          ({
+            id,
+            title,
+            price,
+            description,
+            category,
+            image,
+            sellerName,
+            stock,
+            size,
+          }) => (
             <Product
               key={id}
               id={id}
               sellerName={sellerName}
+              size={size}
               title={title}
               price={price}
               description={description}
               category={category}
               image={image}
+              stock={stock}
             />
           )
         )}

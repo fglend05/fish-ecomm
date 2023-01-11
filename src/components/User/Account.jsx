@@ -39,7 +39,7 @@ function Account() {
                 My Details
               </button>
 
-              <button
+              {/* <button
                 className="buttonTwo"
                 onClick={(e) => {
                   e.preventDefault();
@@ -54,7 +54,7 @@ function Account() {
                   <LocationOnRoundedIcon />
                 </div>
                 Delivery Address
-              </button>
+              </button> */}
               {user[0].role === "seller" && (
                 <button
                   className="buttonTwo"
