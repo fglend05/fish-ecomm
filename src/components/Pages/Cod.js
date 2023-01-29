@@ -1,3 +1,4 @@
+import produce from "immer";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../Context/AuthContext";
@@ -12,26 +13,20 @@ export const Cod = ({ onClose, formData }) => {
   const [totalPrice] = useState(formData.totalPrice);
   const [status] = useState("toPay");
   const [totalQty] = useState(formData.totalQty);
-  const [cartProducts, setCartProducts] = useState([]);
+  const [dataFrom, setDataFrom] = useState([]);
   const nav = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (user) {
-        await db.collection("Cart " + uid.id).onSnapshot((snapshot) => {
-          const newCart = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setCartProducts(newCart);
-        });
-      } else {
-        console.log("Please sign in");
-      }
-    };
     fetchData();
   }, []);
-  const handleCartSubmit = async (e) => {
+
+  const fetchData = async () => {
+    const getData = await db.collection("Cart " + uid.id).doc();
+
+    setDataFrom(getData);
+    console.log(dataFrom.id);
+  };
+  const handleCartSubmit = async (e, { onClose }) => {
     e.preventDefault();
     try {
       await db.collection("Buyer-Personal-Info").add({
@@ -52,6 +47,9 @@ export const Cod = ({ onClose, formData }) => {
           .doc(snap.id)
           .delete();
       }
+      await db.collection("products").where("id", "===", formData.id).update({
+        qty: -1,
+      });
       onClose();
       nav("/");
     } catch (err) {
@@ -92,7 +90,10 @@ export const Cod = ({ onClose, formData }) => {
               <h3 className="mb-4 text-xl font-medium text-gray-900 ">
                 Cart Summary
               </h3>
-              <form className="space-y-6 lg:px-8" onSubmit={handleCartSubmit}>
+              <form
+                className="space-y-6 lg:px-8"
+                onSubmit={handleCartSubmit(onClose)}
+              >
                 <div>
                   <label htmlFor="">Delivery Address</label>
                   <input
@@ -126,7 +127,7 @@ export const Cod = ({ onClose, formData }) => {
                   />
                 </div>
                 <div>
-                  <button type="submit" className="">
+                  <button type="submit" className="button">
                     Submit
                   </button>
                 </div>
