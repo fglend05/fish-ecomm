@@ -3,17 +3,20 @@ import "../Landing/Register.css";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import MyDetails from "./MyDetails";
 import MyAdress from "./MyAdress";
 import { useState } from "react";
 import Selling from "./Selling";
 import { UserAuth } from "../Context/AuthContext";
+import Sold from "./Sold";
 
 function Account() {
   const { user } = UserAuth();
   const [isDetailsToggled, setDetailsIsToggled] = useState(true);
   const [isAddressToggled, setAddressIsToggled] = useState(false);
   const [isSellerToggled, setSellerIsToggled] = useState(false);
+  const [isSoldToggled, setSoldIsToggled] = useState(false);
 
   return (
     <div className="w-screen  h-full bg-zinc-300">
@@ -30,6 +33,7 @@ function Account() {
                     setDetailsIsToggled(true);
                     setAddressIsToggled(false);
                     setSellerIsToggled(false);
+                    setSoldIsToggled(false);
                   }
                 }}
               >
@@ -56,22 +60,42 @@ function Account() {
                 Delivery Address
               </button> */}
               {user[0].role === "seller" && (
-                <button
-                  className="buttonTwo"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (isSellerToggled === false) {
-                      setDetailsIsToggled(false);
-                      setAddressIsToggled(false);
-                      setSellerIsToggled(true);
-                    }
-                  }}
-                >
-                  <div className="pr-3">
-                    <StorefrontRoundedIcon />
-                  </div>
-                  List Products
-                </button>
+                <>
+                  <button
+                    className="buttonTwo"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (isSellerToggled === false) {
+                        setDetailsIsToggled(false);
+                        setAddressIsToggled(false);
+                        setSoldIsToggled(false);
+                        setSellerIsToggled(true);
+                      }
+                    }}
+                  >
+                    <div className="pr-3">
+                      <StorefrontRoundedIcon />
+                    </div>
+                    List Products
+                  </button>
+                  <button
+                    className="buttonTwo"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (isSoldToggled === false) {
+                        setDetailsIsToggled(false);
+                        setAddressIsToggled(false);
+                        setSellerIsToggled(false);
+                        setSoldIsToggled(true);
+                      }
+                    }}
+                  >
+                    <div className="pr-3">
+                      <MonetizationOnIcon />
+                    </div>
+                    Sold Products
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -81,6 +105,7 @@ function Account() {
               {isDetailsToggled && <MyDetails />}
               {isAddressToggled && <MyAdress />}
               {user[0].role === "seller" && isSellerToggled && <Selling />}
+              {user[0].role === "seller" && isSoldToggled && <Sold />}
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@ export const OrderSpec = ({ sellerName, image, title, qty, description }) => {
         </div>
         <div className="h-full w-full">
           <div className="">
-            <p>Status:</p>
+            <p>Status: </p>
           </div>
         </div>
       </div>
